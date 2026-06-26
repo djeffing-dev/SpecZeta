@@ -76,6 +76,7 @@ import org.springframework.context.annotation.Configuration;
         },
         tags = {
                 @Tag(name = "Authentification", description = "Inscription, connexion et délivrance du JWT."),
+                @Tag(name = "Authentification OAuth2 (Google)", description = "Connexion / inscription déléguée via Google (OAuth2 + OpenID Connect) : génération de l'URL de consentement et échange du code contre un JWT."),
                 @Tag(name = "Vérification OTP", description = "Vérification de l'adresse email par code à usage unique (OTP) et renvoi d'un nouveau code."),
                 @Tag(name = "Utilisateurs", description = "Profil personnel, profil public, tableau de bord et système de notation."),
                 @Tag(name = "Annonces", description = "Cycle de vie complet d'une annonce : création, mise à jour, statut, certification benchmark."),
