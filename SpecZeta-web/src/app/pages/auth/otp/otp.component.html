@@ -1,0 +1,88 @@
+<div class="section-authentication-signin d-flex align-items-center justify-content-center min-vh-100">
+    <div class="container">
+        <div class="row row-cols-1 row-cols-lg-2 row-cols-xl-3">
+            <div class="col mx-auto">
+                <div class="card mb-0">
+                    <div class="card-body">
+                        <div class="p-4">
+
+                            <!-- Logo -->
+                            <div class="text-center mb-4">
+                                <div class="d-flex align-items-center justify-content-center gap-2 mb-2">
+                                    <svg width="36" height="36" viewBox="0 0 28 28" fill="none">
+                                        <rect width="28" height="28" rx="8" fill="#4F46E5" />
+                                        <path d="M7 14h4l3-6 3 12 3-6h4" stroke="white" stroke-width="2.2"
+                                            stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                    <span
+                                        style="font-size:1.5rem;font-weight:800;letter-spacing:-0.02em;color:#0F172A;">
+                                        track<span style="color:#4F46E5;">Io</span>
+                                    </span>
+                                </div>
+                                <h5 class="mb-1">Vérification de l'email</h5>
+                                <p class="mb-1 text-muted">Un code à 6 chiffres a été envoyé à</p>
+                                <p class="fw-semibold mb-0" style="color:#4F46E5;">{{ email }}</p>
+                            </div>
+
+                            <!-- Cases OTP -->
+                            <div class="d-flex justify-content-center gap-2 mb-3" (paste)="onPaste($event)">
+                                @for (digit of digits; track $index) {
+                                <input #digitInput type="text" inputmode="numeric" maxlength="1"
+                                    class="form-control text-center fw-bold fs-4" style="width: 48px; height: 56px;"
+                                    [value]="digit" [disabled]="isLoading" (input)="onDigitInput($index, $event)"
+                                    (keydown)="onKeyDown($index, $event)" />
+                                }
+                            </div>
+
+                            <!-- Message d'erreur -->
+                            @if (errorMessage) {
+                            <div class="alert alert-danger py-2 text-center mb-3">{{ errorMessage }}</div>
+                            }
+
+                            <!-- Message de succès (renvoi) -->
+                            @if (successMessage) {
+                            <div class="alert alert-success py-2 text-center mb-3">{{ successMessage }}</div>
+                            }
+
+                            <!-- Bouton Vérifier -->
+                            <div class="d-grid mb-3">
+                                <button type="button" class="btn btn-primary"
+                                    [disabled]="code.length !== 6 || isLoading" (click)="submit()">
+                                    @if (isLoading) {
+                                    <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+                                    Vérification...
+                                    } @else {
+                                    Vérifier le code
+                                    }
+                                </button>
+                            </div>
+
+                            <!-- Renvoi du code -->
+                            <div class="text-center">
+                                @if (!canResend) {
+                                <p class="text-muted small mb-0">
+                                    Renvoyer le code dans
+                                    <span class="fw-semibold text-dark">{{ countdownDisplay }}</span>
+                                </p>
+                                } @else {
+                                <button type="button" class="btn btn-link btn-sm p-0 text-decoration-none"
+                                    (click)="resend()">
+                                    Renvoyer un nouveau code
+                                </button>
+                                }
+                            </div>
+
+                            <!-- Lien retour -->
+                            <div class="text-center mt-3">
+                                <a routerLink="/login" class="text-muted small">
+                                    &larr; Retour à la connexion
+                                </a>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
