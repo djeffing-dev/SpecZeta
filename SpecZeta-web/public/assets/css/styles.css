@@ -7264,7 +7264,7 @@ h4.modal-header-title {
     background: #fff;
     padding: 0 20px;
 }
-.social-login ul {
+/* .social-login ul {
 	margin: 0;
     width: 100%;
 	padding:0;
@@ -7272,19 +7272,19 @@ h4.modal-header-title {
     display: flex;
     -ms-flex-wrap: wrap;
     flex-wrap: wrap;
-}
-.social-login ul li {
+} */
+/* .social-login ul li {
 	display: inline-block;
     -ms-flex: 0 0 33.333333%;
     flex: 0 0 50%;
     width:50%;
     list-style: none;
 	padding:0 10px;
-}
+} */
 .social-login ul li a.btn {
-    width: 100%;
+    width: 93%;
 	border-radius:5px;
-    padding: 20px 0;
+    padding: 20px;
 	color:#ffffff !important;
     background:#f4f5f7;
 }

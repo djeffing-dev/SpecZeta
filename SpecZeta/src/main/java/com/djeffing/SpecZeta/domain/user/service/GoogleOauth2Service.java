@@ -6,6 +6,7 @@ import com.djeffing.SpecZeta.domain.user.dto.UserSummaryResponse;
 import com.djeffing.SpecZeta.domain.user.entity.User;
 import com.djeffing.SpecZeta.domain.user.repository.UserRepository;
 import com.djeffing.SpecZeta.security.JwtTokenProvider;
+import com.djeffing.SpecZeta.shared.dto.UrlDto;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeRequestUrl;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeTokenRequest;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
@@ -39,11 +40,13 @@ public class GoogleOauth2Service {
     private final GsonFactory jsonFactory = new GsonFactory();
 
     //Generation de l'url d'authentification via google
-    public String createUrl(){
-        return new GoogleAuthorizationCodeRequestUrl(clientId,
+    public UrlDto createUrl(){
+        String url = new GoogleAuthorizationCodeRequestUrl(clientId,
                 redirectionUrl,
                 Arrays.asList("email","profile","openid"))
                 .build();
+
+        return new UrlDto(url);
     }
 
     // Recuperer le token d'authentification

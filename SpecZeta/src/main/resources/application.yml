@@ -41,7 +41,7 @@ spring:
               - openid
               - email
               - profile
-            redirect-uri: "${REDIRECT_URI:http://localhost:4200/login}"
+            redirect-uri: "${REDIRECT_URI:http://localhost:4200/oauth/redirect}"
 
   # CORRIGÉ : Déplacé directement sous "spring:"
   elasticsearch:

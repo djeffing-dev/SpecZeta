@@ -1,5 +1,5 @@
-import { Component, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import {
   AbstractControl,
   FormBuilder,
@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 
 import { AuthService } from '../../../services/auth/auth.service';
 import { environment } from '../../../../environments/environment';
+import { GoogleOauth2Service } from '../../../services/auth/oauh2/googleOauth2/google-oauth2.service';
 
 /** Vérifie que les champs `password` et `confirmPassword` sont identiques. */
 function passwordsMatch(group: AbstractControl): ValidationErrors | null {
@@ -26,14 +27,18 @@ function passwordsMatch(group: AbstractControl): ValidationErrors | null {
   templateUrl: './signup.component.html',
   styleUrl: './signup.component.css'
 })
-export class SignupComponent {
+export class SignupComponent implements OnInit{
+  private readonly platformId = inject(PLATFORM_ID);
   private readonly fb = inject(FormBuilder);
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly gooleOauth2Service= inject(GoogleOauth2Service)
+  
 
   loading = false;
   errorMessage: string | null = null;
   successMessage: string | null = null;
+  url:string = "";
 
   readonly form = this.fb.nonNullable.group(
     {
@@ -47,6 +52,12 @@ export class SignupComponent {
 
   get f() {
     return this.form.controls;
+  }
+
+  ngOnInit(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      this.loginWithGoogle();
+    }
   }
 
   submit(): void {
@@ -80,5 +91,13 @@ export class SignupComponent {
   /** Redirige vers le flux OAuth2 Google géré par Spring Security côté backend. */
   signupWithGoogle(): void {
     window.location.href = `${environment.mediaUrl}/oauth2/authorization/google`;
+  }
+
+  loginWithGoogle(): void {
+    this.gooleOauth2Service.getUrl().subscribe({
+      next: (res) => {
+        this.url =res;
+      }
+    })
   }
 }

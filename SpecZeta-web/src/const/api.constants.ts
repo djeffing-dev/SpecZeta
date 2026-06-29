@@ -59,5 +59,11 @@ export const API_ENDPOINTS = {
     MESSAGES: (id: number | string) => `${BASE}/conversations/${id}/messages`,
     SEND_MESSAGE: (id: number | string) => `${BASE}/conversations/${id}/messages`,
     MARK_AS_READ: (id: number | string) => `${BASE}/conversations/${id}/read`,
+  },
+
+  // Google Oauth2
+  GOOGLE_OAUTH: {
+    GET_URL: `${BASE}/auth/google/getUrl`,
+    GET_TOKEN: (code:string) => `${BASE}/auth/google/getToken?code=${code}`,
   }
 };

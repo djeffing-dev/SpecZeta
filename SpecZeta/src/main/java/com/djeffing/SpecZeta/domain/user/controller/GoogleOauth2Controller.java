@@ -2,6 +2,7 @@ package com.djeffing.SpecZeta.domain.user.controller;
 
 import com.djeffing.SpecZeta.domain.user.dto.AuthResponse;
 import com.djeffing.SpecZeta.domain.user.service.GoogleOauth2Service;
+import com.djeffing.SpecZeta.shared.dto.UrlDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -60,9 +61,8 @@ public class GoogleOauth2Controller {
             )
     })
     @GetMapping("/getUrl")
-    public ResponseEntity<?> createUrl() {
-        String url = googleOauth2Service.createUrl();
-        return ResponseEntity.ok(url);
+    public ResponseEntity<UrlDto> createUrl() {
+        return ResponseEntity.ok(googleOauth2Service.createUrl());
     }
 
     @Operation(

@@ -15,9 +15,15 @@ export const routes: Routes = [
         component: DashboardComponent
     },
     
+    // {
+    //     path: 'login',
+    //     component: LoginComponent
+    // },
+
     {
-        path: 'login',
-        component: LoginComponent
+    path: 'oauth/redirect',
+    loadComponent: () => import('./pages/auth/oauth-redirect/oauth-redirect.component')
+      .then(m => m.OauthRedirectComponent)
     },
 
     {

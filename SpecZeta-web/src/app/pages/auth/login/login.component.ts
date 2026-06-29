@@ -1,11 +1,12 @@
-import { Component, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, inject, OnInit, PLATFORM_ID  } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 
 import { AuthService } from '../../../services/auth/auth.service';
 import { environment } from '../../../../environments/environment';
 import { OtpService } from '../../../services/otp/otp.service';
+import { GoogleOauth2Service } from '../../../services/auth/oauh2/googleOauth2/google-oauth2.service';
 
 @Component({
   selector: 'app-login',
@@ -14,13 +15,17 @@ import { OtpService } from '../../../services/otp/otp.service';
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit{
+
   private readonly fb = inject(FormBuilder);
+  private readonly platformId = inject(PLATFORM_ID);
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
   private readonly otpService= inject(OtpService)
+  private readonly gooleOauth2Service= inject(GoogleOauth2Service)
 
   loading = false;
+  url:string = "";
   errorMessage: string | null = null;
 
   readonly form = this.fb.nonNullable.group({
@@ -31,6 +36,12 @@ export class LoginComponent {
 
   get f() {
     return this.form.controls;
+  }
+
+  ngOnInit(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      this.loginWithGoogle();
+    }
   }
 
   submit(): void {
@@ -73,6 +84,12 @@ export class LoginComponent {
 
   /** Redirige vers le flux OAuth2 Google géré par Spring Security côté backend. */
   loginWithGoogle(): void {
-    window.location.href = `${environment.mediaUrl}/oauth2/authorization/google`;
+    this.gooleOauth2Service.getUrl().subscribe({
+      next: (res) => {
+        this.url =res;
+      }
+    })
   }
+
+
 }

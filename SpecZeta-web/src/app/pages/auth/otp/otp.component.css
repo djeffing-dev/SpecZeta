@@ -1,0 +1,57 @@
+/* ----------------------------------------------------------------------
+   Vérification OTP — habillage des cases de saisie, aligné sur le thème
+   Bootstrap du projet (couleur primaire via --bs-primary).
+---------------------------------------------------------------------- */
+
+.card {
+  border: none;
+  border-radius: 1rem;
+  box-shadow: 0 10px 40px rgba(15, 23, 42, 0.08);
+}
+
+/* Cases du code à 6 chiffres */
+.otp-digit {
+  width: 48px;
+  height: 56px;
+  border: 1.5px solid var(--bs-border-color, #dee2e6);
+  border-radius: 0.65rem;
+  color: var(--bs-dark, #0f172a);
+  background-color: #fff;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.otp-digit:focus {
+  border-color: var(--bs-primary);
+  box-shadow: 0 0 0 0.2rem rgba(var(--bs-primary-rgb, 13, 110, 253), 0.25);
+  outline: none;
+  transform: translateY(-1px);
+}
+
+/* Case déjà remplie : léger accent de la couleur primaire */
+.otp-digit.filled {
+  border-color: var(--bs-primary);
+  background-color: rgba(var(--bs-primary-rgb, 13, 110, 253), 0.04);
+}
+
+.otp-digit:disabled {
+  background-color: var(--bs-light, #f8f9fa);
+  opacity: 0.85;
+}
+
+/* En cas d'erreur, on retire le ":valid/:invalid" feedback natif de Bootstrap
+   (pas d'icône) tout en gardant la bordure rouge. */
+.otp-digit.is-invalid {
+  background-image: none;
+  border-color: var(--bs-danger, #dc3545);
+}
+
+/* Petite animation de secousse quand le code est rejeté */
+@keyframes otp-shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-6px); }
+  40%, 80% { transform: translateX(6px); }
+}
+
+.otp-inputs.shake {
+  animation: otp-shake 0.4s ease;
+}
