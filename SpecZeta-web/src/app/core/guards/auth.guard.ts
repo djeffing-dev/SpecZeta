@@ -27,7 +27,7 @@ export const authGuard: CanActivateFn = (): Observable<boolean | UrlTree> => {
   // Cas 3 : plus aucun token utilisable
   if (!refreshToken || auth.isTokenExpired(refreshToken)) {
     auth.clearSession();
-    return of(router.createUrlTree(['/login']));
+    return of(router.createUrlTree(['/singup']));
   }
 
   // Cas 2 : access expiré mais refresh valide → renouvellement
@@ -35,7 +35,7 @@ export const authGuard: CanActivateFn = (): Observable<boolean | UrlTree> => {
     switchMap(success =>
       success
         ? of(true)
-        : of(router.createUrlTree(['/login']))
+        : of(router.createUrlTree(['/singup']))
       // Note : si success = false, clearSession() + navigate ont déjà
       // été appelés dans refreshAccessToken(), la UrlTree est un filet de sécurité.
     )

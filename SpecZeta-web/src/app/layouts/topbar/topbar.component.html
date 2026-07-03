@@ -193,6 +193,43 @@
                 </ul>
 
                 <ul class="nav-menu nav-menu-social align-to-right">
+                    <li *ngIf="user!=null">
+                      <div class="btn-group account-drop">
+                        <button type="button" class="btn btn-order-by-filt dropdown-toggle" id="showbutton"
+                          data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <img [src]="(user.photoUrl!=null) ? user.photoUrl: staticProfilUrl " class="avater-img" alt="">Hi, {{ user.pseudo }}
+                        </button>
+                        <div class="dropdown-menu pull-right animated flipInX" id="showing">
+                          <a href="dashboard.html"><i class="fa-solid fa-gauge"></i>Dashboard</a>
+                          <a href="my-profile.html"><i class="fa-solid fa-address-card"></i>My Profile</a>
+                          <a href="my-property.html"><i class="fa-solid fa-building-circle-check"></i>My Property</a>
+                          <a href="bookmark-list.html"><i class="fa-solid fa-bookmark"></i>Bookmarked Property</a>
+                          <a href="submit-property-dashboard.html"><i class="fa-solid fa-house"></i>Submit Property</a>
+                          <a href="change-password.html"><i class="fa-solid fa-unlock"></i>Change Password</a>
+                        </div>
+                      </div>
+                    </li>
+
+                    <li *ngIf="user==null">
+                        <a href="JavaScript:Void(0);" data-bs-toggle="modal" data-bs-target="#login"
+                            class="fw-medium text-muted-2">
+                            <span class="svg-icon svg-icon-2hx me-1">
+                                <svg width="22" height="22" viewBox="0 0 18 18" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path opacity="0.3"
+                                        d="M16.5 9C16.5 13.125 13.125 16.5 9 16.5C4.875 16.5 1.5 13.125 1.5 9C1.5 4.875 4.875 1.5 9 1.5C13.125 1.5 16.5 4.875 16.5 9Z"
+                                        fill="currentColor" />
+                                    <path
+                                        d="M9 16.5C10.95 16.5 12.75 15.75 14.025 14.55C13.425 12.675 11.4 11.25 9 11.25C6.6 11.25 4.57499 12.675 3.97499 14.55C5.24999 15.75 7.05 16.5 9 16.5Z"
+                                        fill="currentColor" />
+                                    <rect x="7" y="6" width="4" height="4" rx="2" fill="currentColor" />
+                                </svg>
+                            </span>
+                            SignUp or SignIn
+                        </a>
+                    </li>
+                </ul>
+                <!--<ul class="nav-menu nav-menu-social align-to-right">
 
                     <li>
                         <a href="JavaScript:Void(0);" data-bs-toggle="modal" data-bs-target="#login"
@@ -212,6 +249,7 @@
                             SignUp or SignIn
                         </a>
                     </li>
+
                     <li class="add-listing">
                         <a href="submit-property.html" class="bg-primary">
                             <span class="svg-icon svg-icon-muted svg-icon-2hx me-1">
@@ -229,6 +267,7 @@
                             </span>Post Property
                         </a>
                     </li>
+
                     <li>
                         <a href="#" class="text-primary" data-bs-toggle="offcanvas"
                             data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling">
@@ -242,7 +281,7 @@
                             </span>
                         </a>
                     </li>
-                </ul>
+                </ul>-->
             </div>
         </nav>
     </div>

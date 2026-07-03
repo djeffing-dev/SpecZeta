@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { HttpClient, HttpBackend } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { Observable, of, tap, map, catchError } from 'rxjs';
+import { Observable, of, tap, map, catchError, BehaviorSubject } from 'rxjs';
 
 import { API_ENDPOINTS } from '../../../const/api.constants';
 import { STORAGE_KEYS } from '../../../const/storage.constants';
@@ -9,6 +9,7 @@ import { AuthResponse, SignupPayload, SignupResponse } from '../../models/auth-r
 import { User } from '../../models/user.model';
 import { ApiResponse } from '../../models/api-response.model';
 import { Token } from '../../models/token.model';
+import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -17,6 +18,13 @@ export class AuthService {
    * Utilisé exclusivement pour le refresh token afin d'éviter la
    * dépendance circulaire : interceptor → AuthService → HttpClient → interceptor.
    */
+  // État interne, privé — personne d'autre ne peut le modifier directement
+  private currentUserSubject = new BehaviorSubject<User | null>(this.getInitialUser());
+
+  // Version publique en lecture seule (Observable) — exposée aux composants
+  currentUser$ = this.currentUserSubject.asObservable();
+  private readonly platformId = inject(PLATFORM_ID);
+  
   private readonly refreshClient: HttpClient;
 
   constructor(
@@ -25,6 +33,22 @@ export class AuthService {
     backend: HttpBackend,
   ) {
     this.refreshClient = new HttpClient(backend);
+  }
+
+  private getInitialUser(): User | null {
+    if (!isPlatformBrowser(this.platformId)) {
+      return null;
+    }
+    const raw = localStorage.getItem(STORAGE_KEYS.USER_INFO);
+    return raw ? JSON.parse(raw) : null;
+  }
+
+   /** Appelé après une connexion réussie (login classique ou Google) */
+   setCurrentUser(user: User): void {
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.setItem(STORAGE_KEYS.USER_INFO, JSON.stringify(user));
+    }
+    this.currentUserSubject.next(user); // ← émet la nouvelle valeur à tous les abonnés
   }
 
   // ------------------------------------------------------------------ Login
@@ -65,6 +89,8 @@ export class AuthService {
     localStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN,  res.accessToken);
     localStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, res.refreshToken);
     localStorage.setItem(STORAGE_KEYS.USER_INFO,     JSON.stringify(res.user));
+    
+    this.setCurrentUser(res.user);// ← notifie toute l'app, dont la navbar
   }
 
   // ----------------------------------------------------------- Token helpers

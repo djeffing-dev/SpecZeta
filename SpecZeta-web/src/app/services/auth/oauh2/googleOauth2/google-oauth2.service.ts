@@ -7,12 +7,14 @@ import { STORAGE_KEYS } from '../../../../../const/storage.constants';
 import { User } from '../../../../models/user.model';
 import { AuthResponse } from '../../../../models/auth-response.model';
 import { ApiResponse } from '../../../../models/api-response.model';
+import { AuthService } from '../../auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GoogleOauth2Service {
   private platformId = inject(PLATFORM_ID);
+  private readonly  auth= inject(AuthService)
 
   constructor(private http: HttpClient) { }
 
@@ -30,7 +32,7 @@ export class GoogleOauth2Service {
       .pipe(
         retry(3),
         // map(res => res.data),
-        tap(res => this.storeSession(res))
+        tap(res => this.auth.storeSession(res))
       )
   }
 
