@@ -43,6 +43,7 @@ import java.util.Set;
 
 @Service
 @Slf4j
+@Transactional
 public class AnnonceService {
 
     private static final int MIN_PHOTOS_REQUISES = 3;

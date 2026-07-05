@@ -7,3 +7,11 @@ export interface User {
   ratingMoyenne: number;
   nombreEvaluations: number;
 }
+
+export interface UserSummaryResponse {
+  id: number;
+  username: string;
+  avatarUrl?: string; // Optionnel selon ton implémentation
+  // Ajoute ici les autres champs de ton UserSummaryResponse
+}
+
