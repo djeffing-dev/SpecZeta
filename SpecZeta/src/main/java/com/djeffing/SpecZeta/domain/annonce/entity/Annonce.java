@@ -109,6 +109,9 @@ public class Annonce {
     @Column(name = "longitude")
     private Double longitude;
 
+    @Column(name = "ville")
+    private String ville;
+
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 

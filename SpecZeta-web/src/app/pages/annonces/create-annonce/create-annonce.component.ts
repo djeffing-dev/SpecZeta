@@ -1,4 +1,4 @@
-import { Component, inject, PLATFORM_ID } from '@angular/core';
+import { Component, inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -12,6 +12,7 @@ import {
   ModeRemise,
   StatutAnnonce,
 } from '../../../models/annoce';
+import { GeolocationService } from '../../../services/geolocalisation/geolocalisation.service';
 
 /** Option affichable dans un <select> : valeur envoyée au backend + libellé FR. */
 interface SelectOption<T> {
@@ -26,9 +27,10 @@ interface SelectOption<T> {
   templateUrl: './create-annonce.component.html',
   styleUrl: './create-annonce.component.css',
 })
-export class CreateAnnonceComponent {
+export class CreateAnnonceComponent implements OnInit{
   private readonly platformId = inject(PLATFORM_ID);
   private readonly annonceService = inject(AnnonceService);
+  private readonly geolocationService= inject(GeolocationService)
   private readonly fb = inject(FormBuilder);
   private readonly router = inject(Router);
 
@@ -83,6 +85,7 @@ export class CreateAnnonceComponent {
     modeRemise: ['', [Validators.required]],
     latitude: [null as number | null],
     longitude: [null as number | null],
+    ville:['' as string | null],
     ficheTechnique: this.fb.group({
       modele: ['', [Validators.maxLength(150)]],
       marque: ['', [Validators.maxLength(100)]],
@@ -96,6 +99,10 @@ export class CreateAnnonceComponent {
       socket: ['', [Validators.maxLength(50)]],
     }),
   });
+
+  ngOnInit(): void {
+      this.detectCity();
+  }
 
   get f() {
     return this.form.controls;
@@ -136,9 +143,34 @@ export class CreateAnnonceComponent {
     this.previews = [];
   }
 
+  private detectCity(): void {
+    // this.loading = true;
+
+    this.geolocationService.getCityFromBrowser().subscribe({
+      next: (res) => {
+        if (res) {
+          console.log("La ville de l'utilisateur : ", res)
+          this.form.controls.latitude.setValue(res.position.coords.latitude);
+          this.form.controls.longitude.setValue(res.position.coords.longitude);
+          this.form.controls.ville.setValue(res.ville);
+
+          console.log("latitude : ", this.form.controls.latitude.value)
+          console.log("longitude : ", this.form.controls.longitude.value)
+        }
+        // si null → le champ reste vide, l'utilisateur peut le remplir manuellement
+        // this.loading = false;
+      },
+      error: (err) => {
+        console.error('❌ Erreur subscribe :', err);
+        this.loading = false;
+      }
+    });
+  }
+
   submit(): void {
     this.errorMessage = null;
     this.successMessage = null;
+    // this.detectCity();
 
     const photosOk = this.validatePhotos();
 
@@ -167,6 +199,7 @@ export class CreateAnnonceComponent {
       modeRemise: raw.modeRemise!,
       latitude: raw.latitude as number,
       longitude: raw.longitude as number,
+      ville: raw.ville as string,
       ficheTechnique: ficheRenseignee ? (ficheSaisie as AnnonceRequest['ficheTechnique']) : undefined!,
     };
 

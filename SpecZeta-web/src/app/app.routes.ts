@@ -5,6 +5,7 @@ import { LoginComponent } from './pages/auth/login/login.component';
 import { SignupComponent } from './pages/auth/signup/signup.component';
 import { authGuard } from './core/guards/auth.guard';
 import { CreateAnnonceComponent } from './pages/annonces/create-annonce/create-annonce.component';
+import { ListAnnonceComponent } from './pages/annonces/list-annonce/list-annonce.component';
 
 export const routes: Routes = [
     {
@@ -43,6 +44,11 @@ export const routes: Routes = [
         path: "create-annonce",
         canActivate: [authGuard],
         component: CreateAnnonceComponent
+    },
+
+    {
+        path:"annonce-list",
+        component: ListAnnonceComponent
     }
 
 ];

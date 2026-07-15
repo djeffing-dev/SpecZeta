@@ -95,6 +95,7 @@ public class AnnonceService {
                 .modeRemise(request.getModeRemise())
                 .latitude(request.getLatitude())
                 .longitude(request.getLongitude())
+                .ville(request.getVille())
                 .statut(StatutAnnonce.EN_ATTENTE)
                 .certifiee(false)
                 .build();

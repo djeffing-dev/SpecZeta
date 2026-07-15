@@ -56,6 +56,8 @@ public class AnnonceListResponse {
 
     @Schema(description = "Ville du vendeur (affichage rapide).", example = "Lyon")
     private String vendeurVille;
+    @Schema(description = "Ville ou l'annonce a été crée (affichage rapide).", example = "Lyon")
+    private String ville;
 
     @Schema(description = "Date de création de l'annonce (ISO-8601).",
             example = "2026-05-21T14:03:22")

@@ -81,6 +81,11 @@ public class CreateAnnonceRequest {
             minimum = "-180", maximum = "180")
     private Double longitude;
 
+    @Schema(description = "Ville dans la quelle se trouve l'annonce",
+            example = "Montreal",
+            minLength = 20, maxLength = 10000)
+    private String ville;
+
     @Valid
     @Schema(description = "Fiche technique détaillée du produit (optionnelle à la création).")
     private FicheTechniqueRequest ficheTechnique;

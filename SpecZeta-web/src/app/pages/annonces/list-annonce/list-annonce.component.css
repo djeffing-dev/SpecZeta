@@ -1,0 +1,13 @@
+/* Empêche les images (notamment portrait) de s'étirer verticalement et d'impacter le layout */
+.list-img-slide {
+  height: 220px !important;
+  min-height: 220px !important;
+  max-height: 220px !important;
+  overflow: hidden !important;
+}
+
+.list-img-slide img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+}

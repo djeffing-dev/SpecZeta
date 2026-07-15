@@ -29,6 +29,7 @@ export interface AnnonceRequest {
     modeRemise: string;    // Idéalement un enum (ex: 'MAIN_PROPRE' | 'ENVOI' | 'LES_DEUX')
     latitude: number;
     longitude: number;
+    ville:string;
     ficheTechnique: FicheTechnique;
 }
 
@@ -165,5 +166,6 @@ export interface AnnonceListResponse{
     photoPrincipaleUrl: string;
     vendeurPseudo: string;
     vendeurVille: string;
+    ville: string;
     createdAt: Date
 }

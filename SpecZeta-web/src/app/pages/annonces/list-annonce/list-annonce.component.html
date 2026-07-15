@@ -1,1 +1,419 @@
-<p>list-annonce works!</p>
+<!-- ============================ All Annonces ================================== -->
+<section class="gray-simple">
+    <div class="container">
+
+        <div class="row m-0">
+            <div class="short_wraping">
+                <div class="row align-items-center">
+
+                    <div class="col-lg-7 col-md-12 col-sm-12 order-lg-2 order-md-3 elco_bor col-sm-12">
+                        <div class="shorting_pagination">
+                            <div class="shorting_pagination_laft">
+                                <h5>{{ annonces.length }} annonce(s) disponible(s)</h5>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-6 col-sm-12 order-lg-3 order-md-2 col-sm-6 pe-0">
+                        <div class="shorting-right">
+                            <label class="me-2">Trier par :</label>
+                            <div class="shorting-by border rounded">
+                                <select id="shorty" class="form-control rounded">
+                                    <option value="">&nbsp;</option>
+                                    <option value="1">Prix croissant</option>
+                                    <option value="2">Prix décroissant</option>
+                                    <option value="3">Plus récentes</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12 col-md-12">
+                <div class="filter_search_opt">
+                    <a href="javascript:void(0);" class="btn btn-dark full-width mb-4" (click)="toggleFilter()">
+                        <span class="svg-icon text-light svg-icon-2hx me-2">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M19.0759 3H4.72777C3.95892 3 3.47768 3.83148 3.86067 4.49814L8.56967 12.6949C9.17923 13.7559 9.5 14.9582 9.5 16.1819V19.5072C9.5 20.2189 10.2223 20.7028 10.8805 20.432L13.8805 19.1977C14.2553 19.0435 14.5 18.6783 14.5 18.273V13.8372C14.5 12.8089 14.8171 11.8056 15.408 10.964L19.8943 4.57465C20.3596 3.912 19.8856 3 19.0759 3Z"
+                                    fill="currentColor" />
+                            </svg>
+                        </span>Filtrer les annonces
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+
+            <!-- Sidebar de filtres -->
+            <div class="col-lg-4 col-md-12 col-sm-12">
+                <div class="simple-sidebar sm-sidebar" id="filter_search"
+                    [style.display]="showFilter ? 'block' : null">
+
+                    <div class="search-sidebar_header">
+                        <h4 class="ssh_heading">Fermer les filtres</h4>
+                        <button (click)="closeFilter()" class="w3-bar-item w3-button w3-large"><i
+                                class="fa-regular fa-circle-xmark fs-5 text-muted-2"></i></button>
+                    </div>
+
+                    <!-- Recherche d'annonces -->
+                    <div class="sidebar-widgets">
+
+                        <div class="search-inner p-0">
+
+                            <div class="filter-search-box">
+                                <div class="form-group">
+                                    <div class="position-relative">
+                                        <input type="text" class="form-control rounded-3 ps-5"
+                                            placeholder="Rechercher une annonce…">
+                                        <div class="position-absolute top-50 start-0 translate-middle-y ms-2">
+                                            <span class="svg-icon text-primary svg-icon-2hx">
+                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546"
+                                                        height="2" rx="1" transform="rotate(45 17.0365 15.1223)"
+                                                        fill="currentColor" />
+                                                    <path
+                                                        d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z"
+                                                        fill="currentColor" />
+                                                </svg>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Filtre : annonces certifiées uniquement -->
+                            <div class="verifyd-prt-block full-width my-1">
+                                <div
+                                    class="d-flex align-items-center justify-content-center justify-content-between border rounded-3 px-2 py-3">
+                                    <div class="eliok-cliops d-flex align-items-center">
+                                        <span class="svg-icon text-success svg-icon-2hx">
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path opacity="0.3"
+                                                    d="M20.5543 4.37824L12.1798 2.02473C12.0626 1.99176 11.9376 1.99176 11.8203 2.02473L3.44572 4.37824C3.18118 4.45258 3 4.6807 3 4.93945V13.569C3 14.6914 3.48509 15.8404 4.4417 16.984C5.17231 17.8575 6.18314 18.7345 7.446 19.5909C9.56752 21.0295 11.6566 21.912 11.7445 21.9488C11.8258 21.9829 11.9129 22 12.0001 22C12.0872 22 12.1744 21.983 12.2557 21.9488C12.3435 21.912 14.4326 21.0295 16.5541 19.5909C17.8169 18.7345 18.8277 17.8575 19.5584 16.984C20.515 15.8404 21 14.6914 21 13.569V4.93945C21 4.6807 20.8189 4.45258 20.5543 4.37824Z"
+                                                    fill="currentColor" />
+                                                <path
+                                                    d="M10.5606 11.3042L9.57283 10.3018C9.28174 10.0065 8.80522 10.0065 8.51412 10.3018C8.22897 10.5912 8.22897 11.0559 8.51412 11.3452L10.4182 13.2773C10.8099 13.6747 11.451 13.6747 11.8427 13.2773L15.4859 9.58051C15.771 9.29117 15.771 8.82648 15.4859 8.53714C15.1948 8.24176 14.7183 8.24176 14.4272 8.53714L11.7002 11.3042C11.3869 11.6221 10.874 11.6221 10.5606 11.3042Z"
+                                                    fill="currentColor" />
+                                            </svg>
+                                        </span><span class="text-muted-2 fw-medium ms-1">Annonces certifiées</span>
+                                    </div>
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" role="switch"
+                                            id="certifieeSwitch">
+                                        <label class="form-check-label" for="certifieeSwitch"></label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="filter_wraps">
+
+                                <!-- Filtre : Catégorie -->
+                                <div class="single_search_boxed">
+                                    <div class="widget-boxed-header">
+                                        <h4>
+                                            <a href="#categorie" data-bs-toggle="collapse" aria-expanded="false"
+                                                role="button" class="collapsed">Catégorie</a>
+                                        </h4>
+                                    </div>
+                                    <div class="widget-boxed-body collapse" id="categorie" data-parent="#categorie">
+                                        <div class="side-list no-border">
+                                            <div class="single_filter_card">
+                                                <div class="card-body pt-0">
+                                                    <div class="inner_widget_link">
+                                                        <ul class="no-ul-list filter-list">
+                                                            <li class="form-check" *ngFor="let cat of categories">
+                                                                <input [id]="'cat-' + cat.value"
+                                                                    class="form-check-input" name="categorie"
+                                                                    type="radio" [value]="cat.value">
+                                                                <label [for]="'cat-' + cat.value"
+                                                                    class="form-check-label">{{ cat.label }}</label>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Filtre : État -->
+                                <div class="single_search_boxed">
+                                    <div class="widget-boxed-header">
+                                        <h4>
+                                            <a href="#etat" data-bs-toggle="collapse" aria-expanded="false"
+                                                role="button" class="collapsed">État</a>
+                                        </h4>
+                                    </div>
+                                    <div class="widget-boxed-body collapse" id="etat" data-parent="#etat">
+                                        <div class="side-list no-border">
+                                            <div class="single_filter_card">
+                                                <div class="card-body pt-0">
+                                                    <div class="inner_widget_link">
+                                                        <ul class="no-ul-list filter-list">
+                                                            <li class="form-check" *ngFor="let e of etats">
+                                                                <input [id]="'etat-' + e.value"
+                                                                    class="form-check-input" name="etat" type="radio"
+                                                                    [value]="e.value">
+                                                                <label [for]="'etat-' + e.value"
+                                                                    class="form-check-label">{{ e.label }}</label>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Filtre : Prix -->
+                                <div class="single_search_boxed">
+                                    <div class="widget-boxed-header">
+                                        <h4>
+                                            <a href="#prix" data-bs-toggle="collapse" aria-expanded="false"
+                                                role="button" class="collapsed">Fourchette de prix</a>
+                                        </h4>
+                                    </div>
+                                    <div class="widget-boxed-body collapse" id="prix" data-parent="#prix">
+                                        <div class="side-list no-border">
+                                            <div class="single_filter_card">
+                                                <div class="card-body pt-0">
+                                                    <div class="row">
+                                                        <div class="col-6">
+                                                            <div class="form-group">
+                                                                <label>Min (€)</label>
+                                                                <input type="number" min="0" class="form-control"
+                                                                    placeholder="0">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <div class="form-group">
+                                                                <label>Max (€)</label>
+                                                                <input type="number" min="0" class="form-control"
+                                                                    placeholder="5000">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="form-group filter_button">
+                                <button type="button" class="btn btn btn-primary rounded full-width">Rechercher</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Sidebar End -->
+
+            </div>
+
+
+            <div class="col-lg-8 col-md-12 list-layout">
+
+                <!-- État de chargement -->
+                <div *ngIf="loading" class="text-center py-5">
+                    <span class="spinner-border text-primary" role="status" aria-hidden="true"></span>
+                    <p class="mt-3 text-muted-2">Chargement des annonces…</p>
+                </div>
+
+                <!-- Erreur -->
+                <div *ngIf="errorMessage && !loading" class="alert alert-danger" role="alert">
+                    {{ errorMessage }}
+                </div>
+
+                <!-- Aucune annonce -->
+                <div *ngIf="!loading && !errorMessage && annonces.length === 0"
+                    class="alert alert-info text-center" role="alert">
+                    Aucune annonce disponible pour le moment.
+                </div>
+
+                <div class="row justify-content-center g-4" *ngIf="!loading && annonces.length > 0">
+
+                    <!-- Annonce -->
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12" *ngFor="let annonce of annonces">
+                        <div class="property-listing list_view style_new">
+
+                            <div class="listing-img-wrapper position-relative">
+                                <div class="position-absolute top-0 left-0 ms-3 mt-3 z-1">
+                            
+                                    <!-- Badge "Vérifié" : uniquement pour les annonces certifiées -->
+                                    <div *ngIf="annonce.certifiee"
+                                        class="label bg-success text-light d-inline-flex align-items-center justify-content-center">
+                                        <span class="svg-icon text-light svg-icon-2hx me-1">
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path opacity="0.3"
+                                                    d="M20.5543 4.37824L12.1798 2.02473C12.0626 1.99176 11.9376 1.99176 11.8203 2.02473L3.44572 4.37824C3.18118 4.45258 3 4.6807 3 4.93945V13.569C3 14.6914 3.48509 15.8404 4.4417 16.984C5.17231 17.8575 6.18314 18.7345 7.446 19.5909C9.56752 21.0295 11.6566 21.912 11.7445 21.9488C11.8258 21.9829 11.9129 22 12.0001 22C12.0872 22 12.1744 21.983 12.2557 21.9488C12.3435 21.912 14.4326 21.0295 16.5541 19.5909C17.8169 18.7345 18.8277 17.8575 19.5584 16.984C20.515 15.8404 21 14.6914 21 13.569V4.93945C21 4.6807 20.8189 4.45258 20.5543 4.37824Z"
+                                                    fill="currentColor"></path>
+                                                <path
+                                                    d="M14.854 11.321C14.7568 11.2282 14.6388 11.1818 14.4998 11.1818H14.3333V10.2272C14.3333 9.61741 14.1041 9.09378 13.6458 8.65628C13.1875 8.21876 12.639 8 12 8C11.361 8 10.8124 8.21876 10.3541 8.65626C9.89574 9.09378 9.66663 9.61739 9.66663 10.2272V11.1818H9.49999C9.36115 11.1818 9.24306 11.2282 9.14583 11.321C9.0486 11.4138 9 11.5265 9 11.6591V14.5227C9 14.6553 9.04862 14.768 9.14583 14.8609C9.24306 14.9536 9.36115 15 9.49999 15H14.5C14.6389 15 14.7569 14.9536 14.8542 14.8609C14.9513 14.768 15 14.6553 15 14.5227V11.6591C15.0001 11.5265 14.9513 11.4138 14.854 11.321ZM13.3333 11.1818H10.6666V10.2272C10.6666 9.87594 10.7969 9.57597 11.0573 9.32743C11.3177 9.07886 11.6319 8.9546 12 8.9546C12.3681 8.9546 12.6823 9.07884 12.9427 9.32743C13.2031 9.57595 13.3333 9.87594 13.3333 10.2272V11.1818Z"
+                                                    fill="currentColor"></path>
+                                            </svg>
+                                        </span>Vérifié
+                                    </div>
+                            
+                                    <!-- Badge "Nouveau" : uniquement pour les annonces de moins d'une semaine -->
+                                    <div *ngIf="isNew(annonce.createdAt)"
+                                        class="label bg-danger text-light d-inline-flex align-items-center justify-content-center ms-1">
+                                        <span class="svg-icon text-light svg-icon-2hx me-1">
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M19.0647 5.43757C19.3421 5.43757 19.567 5.21271 19.567 4.93534C19.567 4.65796 19.3421 4.43311 19.0647 4.43311C18.7874 4.43311 18.5625 4.65796 18.5625 4.93534C18.5625 5.21271 18.7874 5.43757 19.0647 5.43757Z"
+                                                    fill="currentColor" />
+                                                <path
+                                                    d="M20.0692 9.48884C20.3466 9.48884 20.5714 9.26398 20.5714 8.98661C20.5714 8.70923 20.3466 8.48438 20.0692 8.48438C19.7918 8.48438 19.567 8.70923 19.567 8.98661C19.567 9.26398 19.7918 9.48884 20.0692 9.48884Z"
+                                                    fill="currentColor" />
+                                                <path
+                                                    d="M12.0335 20.5714C15.6943 20.5714 18.9426 18.2053 20.1168 14.7338C20.1884 14.5225 20.1114 14.289 19.9284 14.161C19.746 14.034 19.5003 14.0418 19.3257 14.1821C18.2432 15.0546 16.9371 15.5156 15.5491 15.5156C12.2257 15.5156 9.48884 12.8122 9.48884 9.48886C9.48884 7.41079 10.5773 5.47137 12.3449 4.35752C12.5342 4.23832 12.6 4.00733 12.5377 3.79251C12.4759 3.57768 12.2571 3.42859 12.0335 3.42859C7.32556 3.42859 3.42857 7.29209 3.42857 12C3.42857 16.7079 7.32556 20.5714 12.0335 20.5714Z"
+                                                    fill="currentColor" />
+                                                <path
+                                                    d="M13.0379 7.47998C13.8688 7.47998 14.5446 8.15585 14.5446 8.98668C14.5446 9.26428 14.7693 9.48891 15.0469 9.48891C15.3245 9.48891 15.5491 9.26428 15.5491 8.98668C15.5491 8.15585 16.225 7.47998 17.0558 7.47998C17.3334 7.47998 17.558 7.25535 17.558 6.97775C17.558 6.70015 17.3334 6.47552 17.0558 6.47552C16.225 6.47552 15.5491 5.76616 15.5491 4.93534C15.5491 4.65774 15.3245 4.43311 15.0469 4.43311C14.7693 4.43311 14.5446 4.65774 14.5446 4.93534C14.5446 5.76616 13.8688 6.47552 13.0379 6.47552C12.7603 6.47552 12.5357 6.70015 12.5357 6.97775C12.5357 7.25535 12.7603 7.47998 13.0379 7.47998Z"
+                                                    fill="currentColor" />
+                                            </svg>
+                                        </span>Nouveau
+                                    </div>
+                                </div>
+                                <div class="list-img-slide">
+                                    <div class="clior">
+                                        <div>
+                                            <a href="javascript:void(0);">
+                                                <img [src]="annonce.photoPrincipaleUrl || placeholderImg"
+                                                    (error)="onImgError($event)" class="img-fluid mx-auto"
+                                                    [alt]="annonce.titre" />
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="list_view_flex">
+
+                                <div class="listing-detail-wrapper mt-1">
+                                    <div class="listing-short-detail-wrap">
+                                        <div class="_card_list_flex mb-2">
+                                            <div class="_card_flex_01 d-flex align-items-center">
+                                                <span class="label bg-light-purple text-purple me-2">{{
+                                                    categorieLabel(annonce.categorie) }}</span>
+                                                <span class="label bg-light-seegreen text-seegreen">{{
+                                                    etatLabel(annonce.etat) }}</span>
+                                            </div>
+                                            <div class="_card_flex_last">
+                                                <h6 class="listing-info-price text-primary fs-4 mb-0">{{ annonce.prix |
+                                                    number:'1.0-2' }} €</h6>
+                                            </div>
+                                        </div>
+                                        <div class="_card_list_flex">
+                                            <div class="_card_flex_01">
+                                                <h4 class="listing-name"><a href="javascript:void(0);"
+                                                        class="prt-link-detail">{{ annonce.titre }}</a></h4>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="price-features-wrapper">
+                                    <div class="list-fx-features d-flex align-items-center justify-content-between">
+                                        <div class="listing-card d-flex align-items-center">
+                                            <div class="square--30 text-muted-2 fs-sm circle gray-simple me-2"><i
+                                                    class="fa-solid fa-user fs-sm"></i></div><span
+                                                class="text-muted-2">{{ annonce.vendeurPseudo }}</span>
+                                        </div>
+                                        <div class="listing-card d-flex align-items-center">
+                                            <div class="square--30 text-muted-2 fs-sm circle gray-simple me-2"><i
+                                                    class="fa-solid fa-location-dot fs-sm"></i></div><span
+                                                class="text-muted-2">{{ annonce.ville }}</span>
+                                        </div>
+                                        <!-- <div class="listing-card d-flex align-items-center">
+                                            <div class="square--30 text-muted-2 fs-sm circle gray-simple me-2"><i
+                                                    class="fa-solid fa-clock fs-sm"></i></div><span
+                                                class="text-muted-2">{{ annonce.createdAt | date:'d MMMM yyyy' }}</span>
+                                        </div> -->
+                                    </div>
+                                </div>
+
+                                <div class="listing-detail-footer d-flex align-items-center justify-content-between">
+                                    <div class="footer-first">
+                                        <div class="foot-rates">
+                                            <span class="text-muted-2 fw-medium">
+                                                {{ categorieLabel(annonce.categorie)}}</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="footer-first">
+                                        <div class="foot-rates">
+                                            <div class="square--30 text-muted-2 fs-sm circle gray-simple me-2"><i
+                                                class="fa-solid fa-clock fs-sm"></i>
+                                            </div>
+                                            <span class="text-muted-2 fw-medium">
+                                                {{ annonce.createdAt | date:'d MMMM yyyy' }}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <!-- <div class="footer-flex">
+                                        <a href="javascript:void(0);" class="btn btn-md btn-primary fw-medium">Voir le
+                                            détail</a>
+                                    </div> -->
+                                </div>
+                                <!-- <div class="listing-detail-footer d-flex align-items-center justify-content-between">
+                                    <div class="footer-flex">
+                                        <a href="javascript:void(0);" class="btn btn-md btn-primary fw-medium">Voir le
+                                            détail</a>
+                                    </div>
+                                </div> -->
+                            </div>
+
+                        </div>
+                    </div>
+                    <!-- Fin annonce -->
+
+                </div>
+
+                <!-- Pagination (à implémenter ultérieurement) -->
+                <div class="row" *ngIf="!loading && annonces.length > 0">
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        <ul class="pagination p-center">
+                            <li class="page-item">
+                                <a class="page-link" href="#" aria-label="Previous">
+                                    <i class="fa-solid fa-arrow-left-long"></i>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                            </li>
+                            <li class="page-item"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                            <li class="page-item active"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item"><a class="page-link" href="#">...</a></li>
+                            <li class="page-item"><a class="page-link" href="#">18</a></li>
+                            <li class="page-item">
+                                <a class="page-link" href="#" aria-label="Next">
+                                    <i class="fa-solid fa-arrow-right-long"></i>
+                                    <span class="sr-only">Next</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</section>
+<!-- ============================ All Annonces ================================== -->
+
+
+
