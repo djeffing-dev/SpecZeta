@@ -15,6 +15,7 @@ import com.djeffing.SpecZeta.domain.annonce.enums.StatutAnnonce;
 import com.djeffing.SpecZeta.domain.annonce.mapper.AnnonceMapper;
 import com.djeffing.SpecZeta.domain.annonce.repository.AnnonceMediaRepository;
 import com.djeffing.SpecZeta.domain.annonce.repository.AnnonceRepository;
+import com.djeffing.SpecZeta.domain.annonce.repository.FicheTechniqueRepository;
 import com.djeffing.SpecZeta.domain.media.dto.DropboxUploadResult;
 import com.djeffing.SpecZeta.domain.media.service.StorageService;
 import com.djeffing.SpecZeta.domain.user.entity.User;
@@ -22,9 +23,7 @@ import com.djeffing.SpecZeta.domain.user.repository.UserRepository;
 import com.djeffing.SpecZeta.shared.exception.BadRequestException;
 import com.djeffing.SpecZeta.shared.exception.InvalidFileException;
 import com.djeffing.SpecZeta.shared.exception.ResourceNotFoundException;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -39,6 +38,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -61,17 +61,19 @@ public class AnnonceService {
     private final StorageService storageService;
 
     private final AnnonceMapper annonceMapper;
+    private final FicheTechniqueRepository ficheTechniqueRepository;
 
     public AnnonceService(AnnonceRepository annonceRepository,
                           AnnonceMediaRepository mediaRepository,
                           UserRepository userRepository,
                           StorageService storageService,
-                          AnnonceMapper annonceMapper) {
+                          AnnonceMapper annonceMapper, FicheTechniqueRepository ficheTechniqueRepository) {
         this.annonceRepository = annonceRepository;
         this.mediaRepository = mediaRepository;
         this.userRepository = userRepository;
         this.storageService = storageService;
         this.annonceMapper = annonceMapper;
+        this.ficheTechniqueRepository = ficheTechniqueRepository;
     }
 
     /**
@@ -131,7 +133,14 @@ public class AnnonceService {
         if (request.getLongitude() != null) annonce.setLongitude(request.getLongitude());
 
         if (request.getFicheTechnique() != null) {
+
+            Optional<FicheTechnique> ficheTechnique = ficheTechniqueRepository.findByAnnoceId(annonceId);
+
             FicheTechnique nouvelle = annonceMapper.toEntity(request.getFicheTechnique());
+            if(ficheTechnique.isPresent()){
+                FicheTechnique ft= ficheTechnique.get();
+                nouvelle.setId(ft.getId());
+            }
             annonce.attachFicheTechnique(nouvelle);
         }
 
