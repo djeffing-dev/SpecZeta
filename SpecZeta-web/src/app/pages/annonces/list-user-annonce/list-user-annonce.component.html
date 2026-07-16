@@ -1,0 +1,169 @@
+<!-- ============================ Page Title Start ================================== -->
+<div class="page-title">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-md-12">
+                <h2 class="ipt-title">Bienvenue{{ currentUser?.pseudo ? ', ' + currentUser?.pseudo : '' }} !</h2>
+                <span class="ipn-subtitle">Gérez vos annonces depuis votre espace personnel</span>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ============================ Page Title End ================================== -->
+
+<!-- ============================ User Dashboard ================================== -->
+<section class="bg-light">
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="col-lg-12 col-md-12">
+                <div class="filter_search_opt">
+                    <a href="javascript:void(0);" (click)="toggleNavigation()" class="btn btn-dark full-width mb-4">
+                        Navigation du tableau de bord<i class="fa-solid fa-bars ms-2"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+
+            <div class="col-lg-3 col-md-12">
+
+                <div class="simple-sidebar sm-sidebar" id="filter_search"
+                    [style.display]="showNavigation ? 'block' : null">
+
+                    <div class="search-sidebar_header">
+                        <h4 class="ssh_heading">Fermer le menu</h4>
+                        <button (click)="closeNavigation()" class="w3-bar-item w3-button w3-large">
+                            <i class="fa-regular fa-circle-xmark fs-5 text-muted-2"></i>
+                        </button>
+                    </div>
+
+                    <div class="sidebar-widgets">
+                        <div class="dashboard-navbar">
+
+                            <div class="d-user-avater">
+                                <img [src]="currentUser?.photoUrl || avatarPlaceholder" (error)="onAvatarError($event)"
+                                    class="img-fluid avater" [alt]="currentUser?.pseudo || 'Avatar'">
+                                <h4>{{ currentUser?.pseudo || 'Mon compte' }}</h4>
+                                <span *ngIf="currentUser?.ville">{{ currentUser?.ville }}</span>
+                            </div>
+
+                            <div class="d-navigation">
+                                <ul>
+                                    <li><a routerLink="/dashboard"><i class="fa-solid fa-gauge"></i>Tableau de bord</a>
+                                    </li>
+                                    <li class="active"><a routerLink="/annonce-user-list"><i
+                                                class="fa-solid fa-list"></i>Mes annonces</a></li>
+                                    <li><a routerLink="/create-annonce"><i class="fa-solid fa-plus"></i>Publier une
+                                            annonce</a></li>
+                                    <li><a routerLink="/annonce-list"><i class="fa-solid fa-store"></i>Toutes les
+                                            annonces</a></li>
+                                    <li><a href="javascript:void(0);" (click)="logout()"><i
+                                                class="fa-solid fa-power-off"></i>Se déconnecter</a></li>
+                                </ul>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="col-lg-9 col-md-12">
+                <div class="dashboard-wraper">
+
+                    <div class="form-submit d-flex align-items-center justify-content-between">
+                        <h4>Mes annonces</h4>
+                        <a routerLink="/create-annonce" class="btn btn-primary btn-sm">
+                            <i class="fa-solid fa-plus me-1"></i>Nouvelle annonce
+                        </a>
+                    </div>
+
+                    <!-- État de chargement -->
+                    <div *ngIf="loading" class="text-center py-5">
+                        <span class="spinner-border text-primary" role="status" aria-hidden="true"></span>
+                        <p class="mt-3 text-muted-2">Chargement de vos annonces…</p>
+                    </div>
+
+                    <!-- Erreur -->
+                    <div *ngIf="errorMessage && !loading" class="alert alert-danger" role="alert">
+                        {{ errorMessage }}
+                    </div>
+
+                    <!-- Aucune annonce -->
+                    <div *ngIf="!loading && !errorMessage && annonces.length === 0" class="text-center py-5">
+                        <i class="fa-solid fa-box-open fs-1 text-muted-2 mb-3 d-block"></i>
+                        <h5>Vous n'avez encore publié aucune annonce.</h5>
+                        <p class="text-muted-2">Mettez en vente votre matériel électronique en quelques clics.</p>
+                        <a routerLink="/create-annonce" class="btn btn-primary mt-2">
+                            <i class="fa-solid fa-plus me-1"></i>Publier ma première annonce
+                        </a>
+                    </div>
+
+                    <div class="row" *ngIf="!loading && annonces.length > 0">
+
+                        <!-- Une annonce -->
+                        <div class="col-md-12 col-sm-12 col-md-12" *ngFor="let annonce of annonces">
+                            <div class="singles-dashboard-list">
+                                <div class="sd-list-left">
+                                    <img [src]="annonce.photoPrincipaleUrl || placeholderImg"
+                                        (error)="onImgError($event)" class="img-fluid" [alt]="annonce.titre" />
+                                    <span *ngIf="annonce.certifiee"
+                                        class="label bg-success text-light position-absolute top-0 start-0 m-2">
+                                        <i class="fa-solid fa-shield-halved me-1"></i>Certifiée
+                                    </span>
+                                </div>
+                                <div class="sd-list-right">
+                                    <span class="label me-2" [ngClass]="statusClass(annonce.status)">{{
+                                        statusLabel(annonce.status) }}</span>
+                                    <span *ngIf="isNew(annonce.createdAt)" class="label bg-light-danger text-danger">
+                                        Nouveau
+                                    </span>
+
+                                    <h4 class="listing_dashboard_title mt-2">
+                                        <a href="javascript:void(0);" (click)="editAnnonce(annonce.id)"
+                                            class="text-primary">{{ annonce.titre }}</a>
+                                    </h4>
+
+                                    <div class="user_dashboard_listed">
+                                        Prix : <strong>{{ annonce.prix | number:'1.0-2' }} €</strong>
+                                    </div>
+                                    <div class="user_dashboard_listed">
+                                        Catégorie : <span class="text-primary">{{ categorieLabel(annonce.categorie)
+                                            }}</span>
+                                        · État : <span class="text-primary">{{ etatLabel(annonce.etat) }}</span>
+                                    </div>
+                                    <div class="user_dashboard_listed" *ngIf="annonce.ville">
+                                        <i class="fa-solid fa-location-dot me-1"></i>{{ annonce.ville }}
+                                    </div>
+                                    <div class="user_dashboard_listed" *ngIf="annonce.createdAt">
+                                        <i class="fa-solid fa-clock me-1"></i>Publiée le {{ annonce.createdAt | date:'d
+                                        MMMM yyyy' }}
+                                    </div>
+
+                                    <div class="action">
+                                        <a href="javascript:void(0);" (click)="editAnnonce(annonce.id)"
+                                            data-bs-toggle="tooltip" data-bs-placement="top" title="Modifier">
+                                            <i class="fa-solid fa-pen-to-square"></i>
+                                        </a>
+                                        <a href="javascript:void(0);" (click)="deleteAnnonce(annonce.id)"
+                                            data-bs-toggle="tooltip" data-bs-placement="top" title="Supprimer"
+                                            class="delete">
+                                            <i class="fa-regular fa-circle-xmark"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Fin annonce -->
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+<!-- ============================ User Dashboard End ================================== -->

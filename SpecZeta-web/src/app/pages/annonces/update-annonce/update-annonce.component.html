@@ -1,1 +1,248 @@
-<p>update-annonce works!</p>
+<!-- ============================ Page Title Start ================================== -->
+<div class="page-title">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12 col-md-12">
+        <h2 class="ipt-title">Modifier l'annonce</h2>
+        <span class="ipn-subtitle">Mettez à jour les informations de votre matériel sur SpecZeta</span>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- ============================ Page Title End ================================== -->
+
+<!-- ============================ Update Annonce Start ================================== -->
+<section class="gray-simple">
+  <div class="container">
+
+    <!-- Chargement initial de l'annonce -->
+    <div *ngIf="loading" class="text-center py-5">
+      <span class="spinner-border text-primary" role="status" aria-hidden="true"></span>
+      <p class="mt-3 text-muted-2">Chargement de l'annonce…</p>
+    </div>
+
+    <div class="row" *ngIf="!loading">
+      <div class="col-lg-12 col-md-12">
+        <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+          {{ errorMessage }}
+        </div>
+        <div *ngIf="successMessage" class="alert alert-success" role="alert">
+          {{ successMessage }}
+        </div>
+      </div>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" novalidate *ngIf="!loading && annonce">
+      <div class="row">
+
+        <!-- Submit Form -->
+        <div class="col-lg-12 col-md-12">
+          <div class="submit-page">
+
+            <!-- Informations principales -->
+            <div class="form-submit">
+              <h3>Informations principales</h3>
+              <div class="submit-section">
+                <div class="row">
+
+                  <div class="form-group col-md-12">
+                    <label>Titre de l'annonce <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" formControlName="titre"
+                      placeholder="Ex : PC Portable Dell XPS 15 (2023) — Core i7, 32 Go RAM, RTX 4060"
+                      [class.is-invalid]="f.titre.invalid && f.titre.touched">
+                    <div class="invalid-feedback" *ngIf="f.titre.invalid && f.titre.touched">
+                      <span *ngIf="f.titre.errors?.['required']">Le titre est requis.</span>
+                      <span *ngIf="f.titre.errors?.['minlength']">5 caractères minimum.</span>
+                      <span *ngIf="f.titre.errors?.['maxlength']">200 caractères maximum.</span>
+                    </div>
+                  </div>
+
+                  <div class="form-group col-md-6">
+                    <label>Catégorie <span class="text-danger">*</span></label>
+                    <select class="form-control" formControlName="categorie"
+                      [class.is-invalid]="f.categorie.invalid && f.categorie.touched">
+                      <option value="">Sélectionnez une catégorie</option>
+                      <option *ngFor="let cat of categories" [value]="cat.value">{{ cat.label }}</option>
+                    </select>
+                    <div class="invalid-feedback" *ngIf="f.categorie.invalid && f.categorie.touched">
+                      La catégorie est requise.
+                    </div>
+                  </div>
+
+                  <div class="form-group col-md-6">
+                    <label>État <span class="text-danger">*</span></label>
+                    <select class="form-control" formControlName="etat"
+                      [class.is-invalid]="f.etat.invalid && f.etat.touched">
+                      <option value="">Sélectionnez un état</option>
+                      <option *ngFor="let e of etats" [value]="e.value">{{ e.label }}</option>
+                    </select>
+                    <div class="invalid-feedback" *ngIf="f.etat.invalid && f.etat.touched">
+                      L'état est requis.
+                    </div>
+                  </div>
+
+                  <div class="form-group col-md-6">
+                    <label>Prix (€) <span class="text-danger">*</span></label>
+                    <input type="number" step="0.01" min="0.01" class="form-control" formControlName="prix"
+                      placeholder="Ex : 1499.00" [class.is-invalid]="f.prix.invalid && f.prix.touched">
+                    <div class="invalid-feedback" *ngIf="f.prix.invalid && f.prix.touched">
+                      <span *ngIf="f.prix.errors?.['required']">Le prix est requis.</span>
+                      <span *ngIf="f.prix.errors?.['min']">Le prix doit être supérieur à 0.</span>
+                    </div>
+                  </div>
+
+                  <div class="form-group col-md-6">
+                    <label>Mode de remise <span class="text-danger">*</span></label>
+                    <select class="form-control" formControlName="modeRemise"
+                      [class.is-invalid]="f.modeRemise.invalid && f.modeRemise.touched">
+                      <option value="">Sélectionnez un mode de remise</option>
+                      <option *ngFor="let m of modesRemise" [value]="m.value">{{ m.label }}</option>
+                    </select>
+                    <div class="invalid-feedback" *ngIf="f.modeRemise.invalid && f.modeRemise.touched">
+                      Le mode de remise est requis.
+                    </div>
+                  </div>
+
+                  <div class="form-group col-md-12">
+                    <label>Description <span class="text-danger">*</span></label>
+                    <textarea class="form-control h-120" formControlName="description"
+                      placeholder="Décrivez l'état réel du produit, les accessoires inclus, l'historique d'utilisation…"
+                      [class.is-invalid]="f.description.invalid && f.description.touched"></textarea>
+                    <div class="invalid-feedback" *ngIf="f.description.invalid && f.description.touched">
+                      <span *ngIf="f.description.errors?.['required']">La description est requise.</span>
+                      <span *ngIf="f.description.errors?.['minlength']">20 caractères minimum.</span>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+            <!-- Fiche technique -->
+            <div class="form-submit" formGroupName="ficheTechnique">
+              <h3>Fiche technique <small class="text-muted fw-normal">(optionnelle)</small></h3>
+              <div class="submit-section">
+                <div class="row">
+
+                  <div class="form-group col-md-6">
+                    <label>Marque</label>
+                    <input type="text" class="form-control" formControlName="marque" placeholder="Ex : Dell">
+                  </div>
+
+                  <div class="form-group col-md-6">
+                    <label>Modèle</label>
+                    <input type="text" class="form-control" formControlName="modele" placeholder="Ex : XPS 15 9530">
+                  </div>
+
+                  <div class="form-group col-md-6">
+                    <label>Processeur</label>
+                    <input type="text" class="form-control" formControlName="processeur"
+                      placeholder="Ex : Intel Core i7-13700H">
+                  </div>
+
+                  <div class="form-group col-md-6">
+                    <label>Carte graphique (GPU)</label>
+                    <input type="text" class="form-control" formControlName="gpu"
+                      placeholder="Ex : NVIDIA RTX 4060 8 Go">
+                  </div>
+
+                  <div class="form-group col-md-4">
+                    <label>RAM (Go)</label>
+                    <input type="number" min="0" class="form-control" formControlName="ramGo" placeholder="Ex : 32">
+                  </div>
+
+                  <div class="form-group col-md-4">
+                    <label>Stockage (Go)</label>
+                    <input type="number" min="0" class="form-control" formControlName="stockageGo"
+                      placeholder="Ex : 1024">
+                  </div>
+
+                  <div class="form-group col-md-4">
+                    <label>Type de stockage</label>
+                    <select class="form-control" formControlName="typeStockage">
+                      <option value="">&nbsp;</option>
+                      <option *ngFor="let t of typesStockage" [value]="t">{{ t }}</option>
+                    </select>
+                  </div>
+
+                  <div class="form-group col-md-4">
+                    <label>Taille de l'écran</label>
+                    <input type="text" class="form-control" formControlName="ecranTaille" placeholder="Ex : 15.6&quot;">
+                  </div>
+
+                  <div class="form-group col-md-4">
+                    <label>Résolution de l'écran</label>
+                    <input type="text" class="form-control" formControlName="ecranResolution"
+                      placeholder="Ex : 3456x2160">
+                  </div>
+
+                  <div class="form-group col-md-4">
+                    <label>Socket CPU</label>
+                    <input type="text" class="form-control" formControlName="socket" placeholder="Ex : LGA1700">
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+            <!-- Photos -->
+            <div class="form-submit">
+              <h3>Photos <small class="text-muted fw-normal">(laisser vide pour conserver les photos actuelles)</small>
+              </h3>
+              <div class="submit-section">
+                <div class="row">
+
+                  <!-- Photos actuelles -->
+                  <div class="form-group col-md-12" *ngIf="existingMedias.length">
+                    <label>Photos actuelles</label>
+                    <div class="d-flex flex-wrap gap-3">
+                      <img *ngFor="let media of existingMedias" [src]="media.dropboxUrl || placeholderImg"
+                        (error)="onImgError($event)" alt="Photo de l'annonce"
+                        style="width: 120px; height: 120px; object-fit: cover; border-radius: 8px;">
+                    </div>
+                  </div>
+
+                  <div class="form-group col-md-12">
+                    <label>Remplacer les photos</label>
+                    <input type="file" class="form-control" accept="image/jpeg,image/png,image/webp" multiple
+                      (change)="onFilesSelected($event)">
+                    <small class="text-muted d-block mt-2">
+                      Facultatif. Pour remplacer les photos, ajoutez entre {{ MIN_PHOTOS }} et {{ MAX_PHOTOS }} images
+                      (JPEG, PNG, WEBP).
+                    </small>
+                    <div class="text-danger mt-2" *ngIf="photosError">{{ photosError }}</div>
+                  </div>
+
+                  <!-- Aperçus des nouvelles photos -->
+                  <div class="form-group col-md-12" *ngIf="previews.length">
+                    <label>Nouvelles photos</label>
+                    <div class="d-flex flex-wrap gap-3">
+                      <img *ngFor="let src of previews" [src]="src" alt="Aperçu"
+                        style="width: 120px; height: 120px; object-fit: cover; border-radius: 8px;">
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group col-lg-12 col-md-12 d-flex gap-3">
+              <button class="btn btn-primary fw-medium px-5" type="submit" [disabled]="saving">
+                <span *ngIf="saving" class="spinner-border spinner-border-sm me-2" role="status"
+                  aria-hidden="true"></span>
+                {{ saving ? 'Enregistrement…' : 'Enregistrer les modifications' }}
+              </button>
+              <button class="btn btn-light-primary fw-medium px-5" type="button" (click)="cancel()" [disabled]="saving">
+                Annuler
+              </button>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </form>
+
+  </div>
+</section>
+<!-- ============================ Update Annonce End ================================== -->

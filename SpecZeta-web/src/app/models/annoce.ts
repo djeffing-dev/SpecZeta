@@ -127,7 +127,7 @@ export interface CertificationResponse {
 
 export interface AnnonceMediaResponse {
     id: number;
-    url: string;
+    dropboxUrl: string;
     ordreAffichage: number;
     principale: boolean;
 }

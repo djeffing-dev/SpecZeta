@@ -97,6 +97,7 @@ export class SignupComponent implements OnInit{
     this.gooleOauth2Service.getUrl().subscribe({
       next: (res) => {
         this.url =res;
+        console.log("Url :", this.url)
       }
     })
   }
