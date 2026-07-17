@@ -144,6 +144,7 @@ export interface AnnonceResponse {
     certifiee: boolean;          // Boolean -> boolean
     latitude: number;            // Double -> number
     longitude: number;           // Double -> number
+    ville: string;
 
     vendeur: UserSummaryResponse;
     // Les objets qui peuvent être null côté backend sont marqués avec "| null"

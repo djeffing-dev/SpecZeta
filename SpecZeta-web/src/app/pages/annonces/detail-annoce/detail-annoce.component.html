@@ -1,0 +1,217 @@
+<div *ngIf="loading" class="text-center py-5 gray-simple" style="min-height: 400px; display: flex; align-items: center; justify-content: center; flex-direction: column;">
+    <span class="spinner-border text-primary" role="status" aria-hidden="true" style="width: 3rem; height: 3rem;"></span>
+    <p class="mt-3 text-muted-2 fs-5">Chargement du détail de l'annonce…</p>
+</div>
+
+<div *ngIf="errorMessage && !loading" class="container py-5">
+    <div class="alert alert-danger text-center" role="alert">
+        <h4 class="alert-heading"><i class="fa-solid fa-triangle-exclamation"></i> Erreur</h4>
+        <p>{{ errorMessage }}</p>
+        <hr>
+        <a routerLink="/annonce-list" class="btn btn-primary btn-sm">Retourner aux annonces</a>
+    </div>
+</div>
+
+<div *ngIf="!loading && !errorMessage && annonce">
+    <!-- ============================ Hero Gallery Start ================================== -->
+    <div *ngIf="images && images.length > 0" class="carousel-container">
+        <!-- Prev Button -->
+        <button *ngIf="images.length > 1" (click)="prevSlide()" class="carousel-nav-btn prev-btn" aria-label="Previous">
+            <i class="fa-solid fa-chevron-left"></i>
+        </button>
+        
+        <!-- Slides track -->
+        <div class="carousel-track" [style.transform]="'translateX(' + (-currentIndex * 100) + '%)'">
+            <div *ngFor="let img of images; let i = index" class="carousel-slide">
+                <img [src]="img" (error)="onImgError($event, i)" alt="Photo de l'annonce" />
+            </div>
+        </div>
+        
+        <!-- Next Button -->
+        <button *ngIf="images.length > 1" (click)="nextSlide()" class="carousel-nav-btn next-btn" aria-label="Next">
+            <i class="fa-solid fa-chevron-right"></i>
+        </button>
+
+        <!-- Indicators -->
+        <div *ngIf="images.length > 1" class="carousel-indicators-custom">
+            <span *ngFor="let img of images; let i = index" 
+                  [class.active]="i === currentIndex" 
+                  (click)="goToSlide(i)" 
+                  class="indicator-dot"></span>
+        </div>
+        
+        <a href="javascript:void(0);" class="btn-view-pic-custom">
+            <i class="fa-solid fa-image me-1"></i> {{ images.length }} photo(s)
+        </a>
+    </div>
+    <!-- ============================ Hero Gallery End ================================== -->
+
+    <!-- ============================ Property Detail Start ================================== -->
+    <section class="gray-simple">
+        <div class="container">
+            <div class="row">
+
+                <!-- property main detail -->
+                <div class="col-lg-8 col-md-12 col-sm-12">
+
+                    <div class="property_block_wrap style-2 p-4">
+                        <div class="prt-detail-title-desc">
+                            <span class="label text-light bg-success me-2">{{ statusLabel(annonce.statut) }}</span>
+                            <span class="label text-light bg-primary" *ngIf="annonce.certifiee">
+                                <i class="fa-solid fa-square-check"></i> Certifiée
+                            </span>
+                            <h3 class="mt-3">{{ annonce.titre }}</h3>
+                            <span><i class="fa-solid fa-location-dot me-1"></i> {{ annonce.ville }}</span>
+                            <h3 class="prt-price-fix text-primary mt-3">{{ annonce.prix | number:'1.0-2' }} €</h3>
+                        </div>
+                    </div>
+
+                    <!-- Fiche Technique Block -->
+                    <div class="property_block_wrap style-2" *ngIf="annonce.ficheTechnique">
+                        <div class="property_block_wrap_header">
+                            <h4 class="property_block_title">Spécifications techniques</h4>
+                        </div>
+                        <div class="block-body">
+                            <ul class="deatil_features">
+                                <li *ngIf="annonce.ficheTechnique.marque"><strong>Marque :</strong> {{ annonce.ficheTechnique.marque }}</li>
+                                <li *ngIf="annonce.ficheTechnique.modele"><strong>Modèle :</strong> {{ annonce.ficheTechnique.modele }}</li>
+                                <li *ngIf="annonce.ficheTechnique.processeur"><strong>Processeur (CPU) :</strong> {{ annonce.ficheTechnique.processeur }}</li>
+                                <li *ngIf="annonce.ficheTechnique.gpu"><strong>Graphique (GPU) :</strong> {{ annonce.ficheTechnique.gpu }}</li>
+                                <li *ngIf="annonce.ficheTechnique.ramGo"><strong>RAM (Mémoire) :</strong> {{ annonce.ficheTechnique.ramGo }} Go</li>
+                                <li *ngIf="annonce.ficheTechnique.stockageGo"><strong>Stockage :</strong> {{ annonce.ficheTechnique.stockageGo }} Go <span *ngIf="annonce.ficheTechnique.typeStockage">({{ annonce.ficheTechnique.typeStockage }})</span></li>
+                                <li *ngIf="annonce.ficheTechnique.ecranTaille"><strong>Écran (Taille) :</strong> {{ annonce.ficheTechnique.ecranTaille }}</li>
+                                <li *ngIf="annonce.ficheTechnique.ecranResolution"><strong>Résolution d'écran :</strong> {{ annonce.ficheTechnique.ecranResolution }}</li>
+                                <!-- <li *ngIf="annonce.ficheTechnique.socket"><strong>Socket :</strong> {{ annonce.ficheTechnique.socket }}</li> -->
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Information Générale Block -->
+                    <div class="property_block_wrap style-2">
+                        <div class="property_block_wrap_header">
+                            <h4 class="property_block_title">Informations de l'annonce</h4>
+                        </div>
+                        <div class="block-body">
+                            <ul class="deatil_features">
+                                <li><strong>Catégorie :</strong> {{ categorieLabel(annonce.categorie) }}</li>
+                                <li><strong>État esthétique :</strong> {{ etatLabel(annonce.etat) }}</li>
+                                <li><strong>Mode de remise :</strong> {{ modeRemiseLabel(annonce.modeRemise) }}</li>
+                                <li><strong>Date de publication :</strong> {{ parseBackendDate(annonce.createdAt) | date:'dd/MM/yyyy à HH:mm' }}</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Description Block -->
+                    <div class="property_block_wrap style-2">
+                        <div class="property_block_wrap_header">
+                            <h4 class="property_block_title">Description</h4>
+                        </div>
+                        <div class="block-body">
+                            <p style="white-space: pre-line; line-height: 1.6; color: #4e5c7f;">{{ annonce.description }}</p>
+                        </div>
+                    </div>
+
+                    <!-- Galerie photos Block -->
+                    <div class="property_block_wrap style-2" *ngIf="images && images.length > 0">
+                        <div class="property_block_wrap_header">
+                            <a data-bs-toggle="collapse" data-parent="#clSev" data-bs-target="#clSev" aria-controls="clSev"
+                                href="javascript:void(0);" aria-expanded="true">
+                                <h4 class="property_block_title">Galerie photos</h4>
+                            </a>
+                        </div>
+                        <div id="clSev" class="panel-collapse collapse show">
+                            <div class="block-body">
+                                <ul class="list-gallery-inline">
+                                    <li *ngFor="let img of images; let i = index">
+                                        <a href="javascript:void(0);" (click)="goToSlide(i)">
+                                            <img [src]="img" (error)="onImgError($event, i)" class="img-fluid mx-auto" style="height: 150px; width: 100%; object-fit: cover;" alt="Photo" />
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- property Sidebar -->
+                <div class="col-lg-4 col-md-12 col-sm-12">
+
+                    <!-- Actions like/share -->
+                    <div class="like_share_wrap b-0">
+                        <ul class="like_share_list">
+                            <li><a href="javascript:void(0);" class="btn btn-likes"><i class="fas fa-share me-1"></i>Partager</a></li>
+                            <li><a href="javascript:void(0);" class="btn btn-likes"><i class="fas fa-heart me-1"></i>Favoris</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="details-sidebar">
+
+                        <!-- Seller Details Widget -->
+                        <div class="sides-widget">
+                            <div class="sides-widget-header bg-primary">
+                                <div class="agent-photo">
+                                    <img [src]="annonce.vendeur.photoUrl || 'assets/img/user-6.png'" alt="Avatar vendeur" style="object-fit: cover; border-radius: 50%;">
+                                </div>
+                                <div class="sides-widget-details">
+                                    <h4><a href="javascript:void(0);">{{ annonce.vendeur.pseudo }}</a></h4>
+                                    <div class="text-white opacity-75 mt-1" *ngIf="annonce.vendeur.ratingMoyenne">
+                                        <i class="fa-solid fa-star text-warning me-1"></i> 
+                                        {{ annonce.vendeur.ratingMoyenne | number:'1.1-1' }} / 5 
+                                        ({{ annonce.vendeur.nombreEvaluations }} avis)
+                                    </div>
+                                    <span class="text-white d-block mt-1">
+                                        <i class="fa-solid fa-location-dot me-1"></i> 
+                                        {{ annonce.vendeur.ville || 'Ville non renseignée' }}
+                                    </span>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+
+                            <div class="sides-widget-body simple-form">
+                                <h5 class="mb-3 text-dark fw-bold">Contacter le vendeur</h5>
+                                <div class="form-group">
+                                    <label>Votre message</label>
+                                    <textarea class="form-control" style="height: 100px;" placeholder="Bonjour, votre article m'intéresse. Est-il toujours disponible ?"></textarea>
+                                </div>
+                                <button class="btn btn-light-primary fw-medium rounded full-width">
+                                    <i class="fa-regular fa-paper-plane me-1"></i> Envoyer le message
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Safety Tips Widget -->
+                        <div class="sides-widget">
+                            <div class="sides-widget-header bg-warning">
+                                <div class="sides-widget-details text-dark">
+                                    <h4 class="text-dark fw-bold"><i class="fa-solid fa-shield-halved me-1"></i> Conseils de sécurité</h4>
+                                    <span class="text-dark opacity-75">Transactions en toute confiance</span>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+
+                            <div class="sides-widget-body simple-form">
+                                <ul class="list-unstyled mb-0" style="font-size: 14px; line-height: 1.5; color: #4e5c7f;">
+                                    <li class="mb-3">
+                                        <i class="fa-solid fa-circle-check text-success me-2"></i>
+                                        Privilégiez la remise en main propre pour pouvoir inspecter et tester le matériel électronique.
+                                    </li>
+                                    <li class="mb-3">
+                                        <i class="fa-solid fa-circle-check text-success me-2"></i>
+                                        Vérifiez le fonctionnement (processeur, RAM, écran) avant de finaliser la transaction.
+                                    </li>
+                                    <li class="mb-0">
+                                        <i class="fa-solid fa-circle-check text-success me-2"></i>
+                                        N'effectuez jamais de paiements à distance par des moyens non sécurisés.
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+</div>

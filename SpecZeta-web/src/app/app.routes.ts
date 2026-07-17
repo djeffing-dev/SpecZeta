@@ -7,6 +7,7 @@ import { authGuard } from './core/guards/auth.guard';
 import { CreateAnnonceComponent } from './pages/annonces/create-annonce/create-annonce.component';
 import { ListAnnonceComponent } from './pages/annonces/list-annonce/list-annonce.component';
 import { ListUserAnnonceComponent } from './pages/annonces/list-user-annonce/list-user-annonce.component';
+import { DetailAnnoceComponent } from './pages/annonces/detail-annoce/detail-annoce.component';
 
 export const routes: Routes = [
     {
@@ -58,6 +59,12 @@ export const routes: Routes = [
         canActivate: [authGuard],
         loadComponent: () => import('./pages/annonces/update-annonce/update-annonce.component')
             .then(m => m.UpdateAnnonceComponent)
+    },
+
+    {
+        path: "annonce-detail/:id",
+        canActivate: [authGuard],
+        component: DetailAnnoceComponent
     },
 
     {

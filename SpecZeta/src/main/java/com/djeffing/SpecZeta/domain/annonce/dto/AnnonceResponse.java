@@ -63,6 +63,9 @@ public class AnnonceResponse {
     @Schema(description = "Longitude WGS84 du point de remise.", example = "4.8357")
     private Double longitude;
 
+    @Schema(description = "Ville ou ce trouve l'article", example = "paris.")
+    private String ville;
+
     @Schema(description = "Profil résumé du vendeur.")
     private UserSummaryResponse vendeur;
 

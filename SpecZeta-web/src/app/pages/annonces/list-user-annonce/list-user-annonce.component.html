@@ -122,8 +122,9 @@
                                     </span>
 
                                     <h4 class="listing_dashboard_title mt-2">
-                                        <a href="javascript:void(0);" (click)="editAnnonce(annonce.id)"
-                                            class="text-primary">{{ annonce.titre }}</a>
+                                        <a [routerLink]="['/annonce-detail', annonce.id]" class="text-primary">
+                                            {{ annonce.titre }}
+                                        </a>
                                     </h4>
 
                                     <div class="user_dashboard_listed">

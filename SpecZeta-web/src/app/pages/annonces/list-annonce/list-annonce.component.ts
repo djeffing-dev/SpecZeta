@@ -6,11 +6,12 @@ import {
   CategorieAnnonce,
   EtatEsthetique,
 } from '../../../models/annoce';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-list-annonce',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './list-annonce.component.html',
   styleUrl: './list-annonce.component.css',
 })

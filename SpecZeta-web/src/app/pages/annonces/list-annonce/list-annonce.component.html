@@ -318,8 +318,11 @@
                                         </div>
                                         <div class="_card_list_flex">
                                             <div class="_card_flex_01">
-                                                <h4 class="listing-name"><a href="javascript:void(0);"
-                                                        class="prt-link-detail">{{ annonce.titre }}</a></h4>
+                                                  <h4 class="listing_dashboard_title mt-2">
+                                                    <a [routerLink]="['/annonce-detail', annonce.id]" class="text-primary">
+                                                        {{ annonce.titre }}
+                                                    </a>
+                                                </h4>
                                             </div>
                                         </div>
                                     </div>
