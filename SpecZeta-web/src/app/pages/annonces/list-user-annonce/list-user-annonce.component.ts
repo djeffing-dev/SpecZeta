@@ -10,11 +10,12 @@ import {
 } from '../../../models/annoce';
 import { AuthService } from '../../../services/auth/auth.service';
 import { User } from '../../../models/user.model';
+import { AccountUserSiderBarComponent } from "../../account/layout/account-user-sider-bar/account-user-sider-bar.component";
 
 @Component({
   selector: 'app-list-user-annonce',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, AccountUserSiderBarComponent],
   templateUrl: './list-user-annonce.component.html',
   styleUrl: './list-user-annonce.component.css'
 })

@@ -13,6 +13,7 @@ import {
   StatutAnnonce,
 } from '../../../models/annoce';
 import { GeolocationService } from '../../../services/geolocalisation/geolocalisation.service';
+import { AccountUserSiderBarComponent } from "../../account/layout/account-user-sider-bar/account-user-sider-bar.component";
 
 /** Option affichable dans un <select> : valeur envoyée au backend + libellé FR. */
 interface SelectOption<T> {
@@ -23,7 +24,7 @@ interface SelectOption<T> {
 @Component({
   selector: 'app-create-annonce',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, AccountUserSiderBarComponent],
   templateUrl: './create-annonce.component.html',
   styleUrl: './create-annonce.component.css',
 })
