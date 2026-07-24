@@ -219,6 +219,25 @@ public class AnnonceService {
         return nouveaux.stream().map(AnnonceMedia::getDropboxUrl).toList();
     }
 
+    public String uploadProfilUrl(Long userId, MultipartFile file){
+        if (file == null) {
+            throw new InvalidFileException("Vous devez telecharger une image");
+        }
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(()->new ResourceNotFoundException(" cette Utilisateur n'existe pas "));
+
+        if(user.getDropboxPath()!=null){
+            storageService.deleteFile(user.getDropboxPath());
+        }
+        DropboxUploadResult result = storageService.uplaoduserProfile(file, userId);
+
+        user.setPhotoUrl(result.sharedUrl());
+        user.setDropboxPath(result.dropboxPath());
+        userRepository.save(user);
+        return user.getPhotoUrl();
+    }
+
     /**
      * Récupère le détail public d'une annonce par son id.
      * Lecture seule, accessible à tous (la sécurité côté contrôleur ouvre le GET).

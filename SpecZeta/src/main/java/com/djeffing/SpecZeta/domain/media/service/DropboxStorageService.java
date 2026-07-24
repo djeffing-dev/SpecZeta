@@ -89,6 +89,16 @@ public class DropboxStorageService implements StorageService {
         return doUpload(file, path, fileName, annonceId);
     }
 
+    @Override
+    public DropboxUploadResult uplaoduserProfile(MultipartFile file, Long userId) {
+        validateFile(file, IMAGE_TYPES_AUTORISES, MAX_PHOTO_BYTES, "photo");
+        String ext = extensionFor(file.getContentType());
+        String fileName = "%d_%s_%d.%s".formatted(userId, shortUuid(), System.currentTimeMillis(), ext);
+        String path = "%s/%s/profilUrl/%d/photos/%s"
+                .formatted(properties.getBasePath(), properties.getEnvironment(), userId, fileName);
+        return doUpload(file, path, fileName, userId);
+    }
+
     /**
      * {@inheritDoc}
      * <p>Mêmes étapes que {@link #uploadAnnoncePhoto} mais avec dossier

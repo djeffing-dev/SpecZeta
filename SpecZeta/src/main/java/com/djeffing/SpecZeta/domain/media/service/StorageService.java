@@ -23,6 +23,8 @@ public interface StorageService {
      */
     DropboxUploadResult uploadAnnoncePhoto(MultipartFile file, Long annonceId, int ordre);
 
+    DropboxUploadResult uplaoduserProfile(MultipartFile file, Long userId);
+
     /**
      * Upload un fichier de certification benchmark (log CPU-Z, HWiNFO, etc.)
      * dans le dossier {@code certifications/} de l'annonce.

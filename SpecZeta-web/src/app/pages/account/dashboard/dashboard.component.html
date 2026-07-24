@@ -1,12 +1,10 @@
-<!-- ============================ Page Title Start================================== -->
+<!-- ============================ Page Title Start ================================== -->
 <div class="page-title">
     <div class="container">
         <div class="row">
             <div class="col-lg-12 col-md-12">
-
-                <h2 class="ipt-title">Welcome!</h2>
-                <span class="ipn-subtitle">Welcome To Your Account</span>
-
+                <h2 class="ipt-title">Mon profil</h2>
+                <span class="ipn-subtitle">Gérez vos informations personnelles</span>
             </div>
         </div>
     </div>
@@ -23,161 +21,150 @@
             </div>
 
             <div class="col-lg-9 col-md-12">
-
-                <div class="row">
-                    <div class="col-lg-12 col-md-12 col-sm-12">
-                        <h4>Your Current Package: <span class="pc-title text-primary">Gold Package</span></h4>
-                    </div>
-                </div>
-
-                <div class="row">
-
-                    <div class="col-lg-4 col-md-6 col-sm-12">
-                        <div class="dashboard-stat widget-1">
-                            <div class="dashboard-stat-content">
-                                <h4>607</h4> <span>Listings Included</span>
-                            </div>
-                            <div class="dashboard-stat-icon"><i class="fa-solid fa-location-dot"></i></div>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-4 col-md-6 col-sm-12">
-                        <div class="dashboard-stat widget-2">
-                            <div class="dashboard-stat-content">
-                                <h4>102</h4> <span>Listings Remaining</span>
-                            </div>
-                            <div class="dashboard-stat-icon"><i class="ti-pie-chart"></i></div>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-4 col-md-6 col-sm-12">
-                        <div class="dashboard-stat widget-3">
-                            <div class="dashboard-stat-content">
-                                <h4>70</h4> <span>Featured Included</span>
-                            </div>
-                            <div class="dashboard-stat-icon"><i class="ti-user"></i></div>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-4 col-md-6 col-sm-12">
-                        <div class="dashboard-stat widget-4">
-                            <div class="dashboard-stat-content">
-                                <h4>30</h4> <span>Featured Remaining</span>
-                            </div>
-                            <div class="dashboard-stat-icon"><i class="fa-solid fa-location-dot"></i></div>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-4 col-md-6 col-sm-12">
-                        <div class="dashboard-stat widget-5">
-                            <div class="dashboard-stat-content">
-                                <h4>Unlimited</h4> <span>Images / per listing</span>
-                            </div>
-                            <div class="dashboard-stat-icon"><i class="ti-pie-chart"></i></div>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-4 col-md-6 col-sm-12">
-                        <div class="dashboard-stat widget-6">
-                            <div class="dashboard-stat-content">
-                                <h4>2021-02-26</h4> <span>Ends On</span>
-                            </div>
-                            <div class="dashboard-stat-icon"><i class="ti-user"></i></div>
-                        </div>
-                    </div>
-
-                </div>
-
                 <div class="dashboard-wraper">
 
-                    <!-- Basic Information -->
-                    <div class="form-submit">
-                        <h4>My Account</h4>
-                        <div class="submit-section">
-                            <div class="row">
-
-                                <div class="form-group col-md-6">
-                                    <label>Your Name</label>
-                                    <input type="text" class="form-control" value="Shaurya Preet">
-                                </div>
-
-                                <div class="form-group col-md-6">
-                                    <label>Email</label>
-                                    <input type="email" class="form-control" value="preet77@gmail.com">
-                                </div>
-
-                                <div class="form-group col-md-6">
-                                    <label>Your Title</label>
-                                    <input type="text" class="form-control" value="Web Designer">
-                                </div>
-
-                                <div class="form-group col-md-6">
-                                    <label>Phone</label>
-                                    <input type="text" class="form-control" value="123 456 5847">
-                                </div>
-
-                                <div class="form-group col-md-6">
-                                    <label>Address</label>
-                                    <input type="text" class="form-control" value="522, Arizona, Canada">
-                                </div>
-
-                                <div class="form-group col-md-6">
-                                    <label>City</label>
-                                    <input type="text" class="form-control" value="Montquebe">
-                                </div>
-
-                                <div class="form-group col-md-6">
-                                    <label>State</label>
-                                    <input type="text" class="form-control" value="Canada">
-                                </div>
-
-                                <div class="form-group col-md-6">
-                                    <label>Zip</label>
-                                    <input type="text" class="form-control" value="160052">
-                                </div>
-
-                                <div class="form-group col-md-12">
-                                    <label>About</label>
-                                    <textarea
-                                        class="form-control">Maecenas quis consequat libero, a feugiat eros. Nunc ut lacinia tortor morbi ultricies laoreet ullamcorper phasellus semper</textarea>
-                                </div>
-
-                            </div>
-                        </div>
+                    <!-- Chargement initial du profil -->
+                    <div *ngIf="loading" class="text-center py-5">
+                        <span class="spinner-border text-primary" role="status" aria-hidden="true"></span>
+                        <p class="mt-3 text-muted-2">Chargement de votre profil…</p>
                     </div>
 
-                    <div class="form-submit">
-                        <h4>Social Accounts</h4>
-                        <div class="submit-section">
-                            <div class="row">
+                    <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+                        {{ errorMessage }}
+                    </div>
+                    <div *ngIf="successMessage" class="alert alert-success" role="alert">
+                        {{ successMessage }}
+                    </div>
 
-                                <div class="form-group col-md-6">
-                                    <label>Facebook</label>
-                                    <input type="text" class="form-control" value="https://facebook.com/">
+                    <form *ngIf="!loading && profile" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+
+                        <!-- Photo de profil -->
+                        <div class="form-submit">
+                            <h4>Photo de profil</h4>
+                            <div class="submit-section">
+                                <div class="d-flex align-items-center gap-3">
+                                    <img [src]="avatarUrl" (error)="onAvatarError($event)" alt="Photo de profil"
+                                        style="width: 96px; height: 96px; object-fit: cover; border-radius: 50%; border: 1px solid #eee;">
+                                    <div>
+                                        <h6 class="mb-1">{{ profile.pseudo }}</h6>
+                                        <small class="text-muted-2 d-block mb-2">
+                                            {{ profile.photoUrl ? 'Votre photo de profil actuelle.' : 'Aucune photo :
+                                            avatar par défaut affiché.' }}
+                                        </small>
+
+                                        <input type="file" #photoInput class="d-none"
+                                            accept="image/jpeg,image/png,image/webp"
+                                            (change)="onPhotoSelected($event)">
+                                        <button type="button" class="btn btn-outline-primary btn-sm"
+                                            (click)="photoInput.click()" [disabled]="uploadingPhoto">
+                                            <span *ngIf="uploadingPhoto"
+                                                class="spinner-border spinner-border-sm me-2" role="status"
+                                                aria-hidden="true"></span>
+                                            {{ uploadingPhoto ? 'Envoi…' : 'Changer la photo' }}
+                                        </button>
+                                        <small class="text-muted-2 d-block mt-1">JPEG, PNG ou WebP — 5 Mo
+                                            maximum.</small>
+                                    </div>
                                 </div>
-
-                                <div class="form-group col-md-6">
-                                    <label>Twitter</label>
-                                    <input type="email" class="form-control" value="https://twitter.com/">
-                                </div>
-
-                                <div class="form-group col-md-6">
-                                    <label>Google Plus</label>
-                                    <input type="text" class="form-control" value="https://googleplus.com/">
-                                </div>
-
-                                <div class="form-group col-md-6">
-                                    <label>LinkedIn</label>
-                                    <input type="text" class="form-control" value="https://linkedin.com/">
-                                </div>
-
-                                <div class="form-group col-lg-12 col-md-12">
-                                    <button class="btn btn-primary rounded px-5" type="button">Save Changes</button>
-                                </div>
-
                             </div>
                         </div>
-                    </div>
+
+                        <!-- Informations personnelles -->
+                        <div class="form-submit">
+                            <h4>Informations personnelles</h4>
+                            <div class="submit-section">
+                                <div class="row">
+
+                                    <div class="form-group col-md-6">
+                                        <label>Pseudo <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" formControlName="pseudo"
+                                            placeholder="Votre pseudo public"
+                                            [class.is-invalid]="f.pseudo.invalid && f.pseudo.touched">
+                                        <div class="invalid-feedback" *ngIf="f.pseudo.invalid && f.pseudo.touched">
+                                            <span *ngIf="f.pseudo.errors?.['required']">Le pseudo est requis.</span>
+                                            <span *ngIf="f.pseudo.errors?.['minlength']">3 caractères minimum.</span>
+                                            <span *ngIf="f.pseudo.errors?.['maxlength']">80 caractères maximum.</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-md-6">
+                                        <label>Email</label>
+                                        <input type="email" class="form-control" [value]="profile.email" readonly
+                                            title="L'adresse email n'est pas modifiable.">
+                                        <small class="text-muted-2">L'email n'est pas modifiable pour le
+                                            moment.</small>
+                                    </div>
+
+                                    <div class="form-group col-md-6">
+                                        <label>Téléphone</label>
+                                        <input type="text" class="form-control" formControlName="telephone"
+                                            placeholder="Ex : +33 6 12 34 56 78">
+                                    </div>
+
+                                    <div class="form-group col-md-6">
+                                        <label>Date de naissance</label>
+                                        <input type="date" class="form-control" formControlName="dateNaissance">
+                                    </div>
+
+                                    <div class="form-group col-md-12">
+                                        <label>Biographie</label>
+                                        <textarea class="form-control h-120" formControlName="biographie"
+                                            placeholder="Présentez-vous en quelques mots (vendeur, matériel proposé…)."></textarea>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Localisation & contact -->
+                        <div class="form-submit">
+                            <h4>Localisation & contact</h4>
+                            <div class="submit-section">
+                                <div class="row">
+
+                                    <div class="form-group col-md-12">
+                                        <label>Adresse</label>
+                                        <input type="text" class="form-control" formControlName="adresse"
+                                            placeholder="Ex : 12 rue des Lilas">
+                                    </div>
+
+                                    <div class="form-group col-md-4">
+                                        <label>Ville</label>
+                                        <input type="text" class="form-control" formControlName="ville"
+                                            placeholder="Ex : Lyon">
+                                    </div>
+
+                                    <div class="form-group col-md-4">
+                                        <label>Code postal</label>
+                                        <input type="text" class="form-control" formControlName="codePostal"
+                                            placeholder="Ex : 69003">
+                                    </div>
+
+                                    <div class="form-group col-md-4">
+                                        <label>Pays</label>
+                                        <input type="text" class="form-control" formControlName="pays"
+                                            placeholder="Ex : France">
+                                    </div>
+
+                                    <div class="form-group col-md-12">
+                                        <label>Site web</label>
+                                        <input type="text" class="form-control" formControlName="siteWeb"
+                                            placeholder="Ex : https://mon-site.dev">
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-lg-12 col-md-12">
+                            <button class="btn btn-primary fw-medium px-5" type="submit" [disabled]="saving">
+                                <span *ngIf="saving" class="spinner-border spinner-border-sm me-2" role="status"
+                                    aria-hidden="true"></span>
+                                {{ saving ? 'Enregistrement…' : 'Enregistrer les modifications' }}
+                            </button>
+                        </div>
+
+                    </form>
 
                 </div>
             </div>
@@ -186,23 +173,3 @@
     </div>
 </section>
 <!-- ============================ User Dashboard End ================================== -->
-
-<!-- ============================ Call To Action ================================== -->
-<section class="theme-bg call-to-act-wrap">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-
-                <div class="call-to-act">
-                    <div class="call-to-act-head">
-                        <h3>Want to Become a Real Estate Agent?</h3>
-                        <span>We'll help you to grow your career and growth.</span>
-                    </div>
-                    <a href="#" class="btn btn-call-to-act">SignUp Today</a>
-                </div>
-
-            </div>
-        </div>
-    </div>
-</section>
-<!-- ============================ Call To Action End ================================== -->

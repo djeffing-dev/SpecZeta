@@ -3,6 +3,8 @@ package com.djeffing.SpecZeta.domain.user.service;
 import com.djeffing.SpecZeta.domain.annonce.enums.StatutAnnonce;
 import com.djeffing.SpecZeta.domain.annonce.repository.AnnonceRepository;
 import com.djeffing.SpecZeta.domain.favoris.repository.FavoriRepository;
+import com.djeffing.SpecZeta.domain.media.dto.DropboxUploadResult;
+import com.djeffing.SpecZeta.domain.media.service.StorageService;
 import com.djeffing.SpecZeta.domain.messaging.repository.ConversationRepository;
 import com.djeffing.SpecZeta.domain.user.dto.DashboardResponse;
 import com.djeffing.SpecZeta.domain.user.dto.RatingRequest;
@@ -17,12 +19,14 @@ import com.djeffing.SpecZeta.domain.user.repository.UserProfileRepository;
 import com.djeffing.SpecZeta.domain.user.repository.UserRatingRepository;
 import com.djeffing.SpecZeta.domain.user.repository.UserRepository;
 import com.djeffing.SpecZeta.shared.exception.BadRequestException;
+import com.djeffing.SpecZeta.shared.exception.InvalidFileException;
 import com.djeffing.SpecZeta.shared.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
 
@@ -38,6 +42,8 @@ public class UserService {
     private final FavoriRepository favoriRepository;
     private final ConversationRepository conversationRepository;
     private final UserMapper userMapper;
+
+    private final StorageService storageService;
 
     /**
      * Récupère le profil complet de l'utilisateur courant (vue privée :
@@ -208,5 +214,24 @@ public class UserService {
     private User findUser(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
+    }
+
+    public String uploadProfilUrl(Long userId, MultipartFile file){
+        if (file == null) {
+            throw new InvalidFileException("Vous devez telecharger une image");
+        }
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(()->new ResourceNotFoundException(" cette Utilisateur n'existe pas "));
+
+        if(user.getDropboxPath()!=null){
+            storageService.deleteFile(user.getDropboxPath());
+        }
+        DropboxUploadResult result = storageService.uplaoduserProfile(file, userId);
+
+        user.setPhotoUrl(result.sharedUrl());
+        user.setDropboxPath(result.dropboxPath());
+        userRepository.save(user);
+        return user.getPhotoUrl();
     }
 }

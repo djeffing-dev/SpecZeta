@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(xargs cat)",
+      "Bash(grep -nA2 \"btn-primary\" public/assets/css/colors.css)"
+    ]
+  }
+}

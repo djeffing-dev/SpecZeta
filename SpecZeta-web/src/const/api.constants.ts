@@ -20,8 +20,11 @@ export const API_ENDPOINTS = {
     ME: `${BASE}/users/me`,
     ME_DASHBOARD: `${BASE}/users/me/dashboard`,
     ME_ANNONCES: `${BASE}/users/me/annonces`,
+    DASHBOARD: `${BASE}/users/me/dashboard`,
+    UPLOAD_PROFIL_URL:`${BASE}/users/me/uploadProfilUrl`,
     PROFILE: (id: number | string) => `${BASE}/users/${id}`,
     SUBMIT_RATING: (id: number | string) => `${BASE}/users/${id}/ratings`,
+    
   },
 
   // Annonces (Catalogue, Gestion, Certification)

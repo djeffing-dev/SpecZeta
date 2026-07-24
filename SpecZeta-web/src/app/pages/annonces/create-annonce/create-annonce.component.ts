@@ -38,6 +38,15 @@ export class CreateAnnonceComponent implements OnInit{
   loading = false;
   errorMessage: string | null = null;
   successMessage: string | null = null;
+  showNavigation = false;
+
+  toggleNavigation(): void {
+    this.showNavigation = !this.showNavigation;
+  }
+
+  closeNavigation(): void {
+    this.showNavigation = false;
+  }
 
   /** Photos sélectionnées (3 à 5 requises pour publier l'annonce). */
   selectedFiles: File[] = [];

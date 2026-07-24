@@ -49,6 +49,8 @@ public class User {
 
     @Column(name = "photo_url", length = 500)
     private String photoUrl;
+    @Column(name = "dropbox_path", length = 500)
+    private String dropboxPath;
 
     @Column(length = 120)
     private String ville;

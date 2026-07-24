@@ -90,4 +90,15 @@ public class MediaController {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.ok(urls, "Photos uploadées"));
     }
+
+    /*@PostMapping(value = "/uploadProfilUrl", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ApiResponse<String>> uploadProfilUrl(
+            @Parameter(description = "Image profil de l'utilisateur (jpeg/png/webp).")
+            @RequestParam("file") MultipartFile file
+    ){
+        Long userId = SecurityUtils.getCurrentUserId();
+        String url = annonceService.uploadProfilUrl(userId, file);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.ok(url, "Photos uploadées"));
+    }*/
 }
