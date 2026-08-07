@@ -8,6 +8,7 @@ import {
   CategorieAnnonce,
   EtatEsthetique,
   ModeRemise,
+  StatutAnnonce,
   UpdateAnnonceRequest,
 } from '../../../models/annoce';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
@@ -82,11 +83,19 @@ export class UpdateAnnonceComponent implements OnInit {
     { value: 'LES_DEUX', label: 'Les deux' },
   ];
 
+  readonly typeStatuts: SelectOption<StatutAnnonce>[] = [
+  {value: StatutAnnonce.ACTIVE, label: 'Active'},
+  {value: StatutAnnonce.VENDUE, label: 'Vendue'},
+  {value: StatutAnnonce.EN_ATTENTE, label: 'En attente'},
+  {value: StatutAnnonce.SUSPENDUE, label: 'Suspendue'},
+  ]
+
   readonly typesStockage = ['HDD', 'SSD', 'NVMe', 'eMMC'];
 
   readonly form = this.fb.group({
     titre: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(200)]],
     description: ['', [Validators.required, Validators.minLength(20), Validators.maxLength(10000)]],
+    statut: ['', [Validators.required]], 
     prix: [null as number | null, [Validators.required, Validators.min(0.01)]],
     categorie: ['', [Validators.required]],
     etat: ['', [Validators.required]],
@@ -163,12 +172,14 @@ export class UpdateAnnonceComponent implements OnInit {
   }
 
   private patchForm(a: AnnonceResponse, m:any): void {
+    console.log('Statut de l\'annonce :', a.statut);
     this.form.patchValue({
       titre: a.titre,
       description: a.description,
       prix: a.prix,
       categorie: a.categorie,
       etat: a.etat,
+      statut: a.statut,
       modeRemise: a.modeRemise,
       latitude: a.latitude,
       longitude: a.longitude,
@@ -222,6 +233,10 @@ export class UpdateAnnonceComponent implements OnInit {
     return true;
   }
 
+  private getStatutSelected(status: string | null): StatutAnnonce {
+   return this.typeStatuts.find(s => s.value === status)?.value 
+  ?? StatutAnnonce.EN_ATTENTE;
+  }
   private revokePreviews(): void {
     if (isPlatformBrowser(this.platformId)) {
       this.previews.forEach((url) => URL.revokeObjectURL(url));
@@ -277,7 +292,11 @@ export class UpdateAnnonceComponent implements OnInit {
           hasNewPhotos
             ? this.annonceService.uploadMedias(this.id, this.selectedFiles)
             : of(null)
-        )
+        ),
+        switchMap(() => 
+          (this.annonce.statut !== raw.statut) 
+          ? this.annonceService.updateStatut(this.id, this.getStatutSelected(raw.statut)) 
+          : of(null) )
       )
       .subscribe({
         next: () => {

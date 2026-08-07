@@ -287,6 +287,21 @@
                                         </span>Nouveau
                                     </div>
                                 </div>
+
+                                <!-- Bouton favoris -->
+                                <button type="button" class="favoris-btn"
+                                    [class.is-favori]="isFavori(annonce.id)"
+                                    [disabled]="isFavorisPending(annonce.id)"
+                                    (click)="toggleFavoris(annonce, $event)"
+                                    [attr.aria-pressed]="isFavori(annonce.id)"
+                                    [attr.aria-label]="favorisLabel(annonce.id)"
+                                    [title]="favorisLabel(annonce.id)">
+                                    <i *ngIf="isFavorisPending(annonce.id)"
+                                        class="fa-solid fa-spinner fa-spin"></i>
+                                    <i *ngIf="!isFavorisPending(annonce.id)"
+                                        [ngClass]="isFavori(annonce.id) ? 'fa-solid fa-heart' : 'fa-regular fa-heart'"></i>
+                                </button>
+
                                 <div class="list-img-slide">
                                     <div class="clior">
                                         <div>
@@ -417,6 +432,22 @@
     </div>
 </section>
 <!-- ============================ All Annonces ================================== -->
+
+<!-- Notification favoris -->
+<div class="favoris-toast" *ngIf="feedback" role="status" aria-live="polite">
+    <div class="alert shadow-sm d-flex align-items-center mb-0"
+        [ngClass]="'alert-' + feedback.type">
+        <i class="me-2"
+            [ngClass]="{
+                'fa-solid fa-circle-check': feedback.type === 'success',
+                'fa-solid fa-circle-exclamation': feedback.type === 'danger',
+                'fa-solid fa-circle-info': feedback.type === 'info'
+            }"></i>
+        <span class="flex-grow-1">{{ feedback.text }}</span>
+        <button type="button" class="btn-close ms-3" aria-label="Fermer"
+            (click)="dismissFeedback()"></button>
+    </div>
+</div>
 
 
 

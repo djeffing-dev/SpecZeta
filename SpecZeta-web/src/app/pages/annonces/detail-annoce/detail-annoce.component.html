@@ -141,7 +141,20 @@
                     <div class="like_share_wrap b-0">
                         <ul class="like_share_list">
                             <li><a href="javascript:void(0);" class="btn btn-likes"><i class="fas fa-share me-1"></i>Partager</a></li>
-                            <li><a href="javascript:void(0);" class="btn btn-likes"><i class="fas fa-heart me-1"></i>Favoris</a></li>
+                            <li>
+                                <button type="button" class="btn btn-likes btn-favoris"
+                                    [class.is-favori]="isFavori"
+                                    [disabled]="favorisPending"
+                                    (click)="toggleFavoris()"
+                                    [attr.aria-pressed]="isFavori"
+                                    [attr.aria-label]="favorisLabel()"
+                                    [title]="favorisLabel()">
+                                    <i *ngIf="favorisPending" class="fa-solid fa-spinner fa-spin me-1"></i>
+                                    <i *ngIf="!favorisPending" class="me-1"
+                                        [ngClass]="isFavori ? 'fa-solid fa-heart' : 'fa-regular fa-heart'"></i>
+                                    {{ isFavori ? 'En favoris' : 'Favoris' }}
+                                </button>
+                            </li>
                         </ul>
                     </div>
 
@@ -214,4 +227,20 @@
             </div>
         </div>
     </section>
+</div>
+
+<!-- Notification favoris -->
+<div class="favoris-toast" *ngIf="feedback" role="status" aria-live="polite">
+    <div class="alert shadow-sm d-flex align-items-center mb-0"
+        [ngClass]="'alert-' + feedback.type">
+        <i class="me-2"
+            [ngClass]="{
+                'fa-solid fa-circle-check': feedback.type === 'success',
+                'fa-solid fa-circle-exclamation': feedback.type === 'danger',
+                'fa-solid fa-circle-info': feedback.type === 'info'
+            }"></i>
+        <span class="flex-grow-1">{{ feedback.text }}</span>
+        <button type="button" class="btn-close ms-3" aria-label="Fermer"
+            (click)="dismissFeedback()"></button>
+    </div>
 </div>

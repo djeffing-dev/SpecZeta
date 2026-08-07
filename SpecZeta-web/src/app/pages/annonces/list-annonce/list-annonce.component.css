@@ -11,3 +11,84 @@
   height: 100% !important;
   object-fit: cover !important;
 }
+
+/* ------------------------------------------------------------ Bouton favoris */
+.favoris-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 2;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.92);
+  color: #8a94a6;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s ease, color 0.2s ease, background 0.2s ease;
+}
+
+.favoris-btn i {
+  font-size: 16px;
+  line-height: 1;
+}
+
+.favoris-btn:hover:not(:disabled) {
+  background: #ffffff;
+  color: #f5325c;
+  transform: scale(1.12);
+}
+
+.favoris-btn:focus-visible {
+  outline: 2px solid #f5325c;
+  outline-offset: 2px;
+}
+
+.favoris-btn.is-favori {
+  color: #f5325c;
+}
+
+/* Petit « pop » au moment où l'annonce passe en favori */
+.favoris-btn.is-favori i {
+  animation: favori-pop 0.28s ease;
+}
+
+.favoris-btn:disabled {
+  cursor: progress;
+  opacity: 0.7;
+}
+
+@keyframes favori-pop {
+  0% { transform: scale(0.7); }
+  60% { transform: scale(1.25); }
+  100% { transform: scale(1); }
+}
+
+/* ------------------------------------------------------- Notification favoris */
+.favoris-toast {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 1080;
+  max-width: 380px;
+  animation: favoris-toast-in 0.25s ease;
+}
+
+@keyframes favoris-toast-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 575.98px) {
+  .favoris-toast {
+    left: 16px;
+    right: 16px;
+    bottom: 16px;
+    max-width: none;
+  }
+}

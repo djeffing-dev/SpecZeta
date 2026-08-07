@@ -76,8 +76,8 @@
                                     </span>
                                 </div>
                                 <div class="sd-list-right">
-                                    <span class="label me-2" [ngClass]="statusClass(annonce.status)">{{
-                                        statusLabel(annonce.status) }}</span>
+                                    <span class="label me-2" [ngClass]="statusClass(annonce.statut)">{{
+                                        statusLabel(annonce.statut) }}</span>
                                     <span *ngIf="isNew(annonce.createdAt)" class="label bg-light-danger text-danger">
                                         Nouveau
                                     </span>
@@ -104,7 +104,7 @@
                                         MMMM yyyy' }}
                                     </div>
 
-                                    <div class="action">
+                                                                        <div class="action">
                                         <a href="javascript:void(0);" (click)="editAnnonce(annonce.id)"
                                             data-bs-toggle="tooltip" data-bs-placement="top" title="Modifier">
                                             <i class="fa-solid fa-pen-to-square"></i>
@@ -113,6 +113,11 @@
                                             data-bs-toggle="tooltip" data-bs-placement="top" title="Supprimer"
                                             class="delete">
                                             <i class="fa-regular fa-circle-xmark"></i>
+                                        </a>
+                                        <a href="javascript:void(0);" (click)="updateStatus(annonce.id)"
+                                            data-bs-toggle="tooltip" data-bs-placement="top" title="Mettre à jour le statut"
+                                            class="update-status">
+                                            <i class="fa-solid fa-sync"></i>
                                         </a>
                                     </div>
                                 </div>

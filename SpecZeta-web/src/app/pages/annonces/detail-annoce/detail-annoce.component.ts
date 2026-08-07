@@ -8,6 +8,17 @@ import {
   EtatEsthetique,
   StatutAnnonce,
 } from '../../../models/annoce';
+import { FavorisService } from '../../../services/favoris/favoris.service';
+import { Observable } from 'rxjs';
+import { ApiResponse } from '../../../models/api-response.model';
+import { FavoriResponse } from '../../../models/favoris';
+
+
+/** Notification éphémère affichée en bas à droite après une action favoris. */
+interface Feedback {
+  type: 'success' | 'danger' | 'info';
+  text: string;
+}
 
 @Component({
   selector: 'app-detail-annoce',
@@ -20,6 +31,8 @@ export class DetailAnnoceComponent implements OnInit, OnDestroy {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly route = inject(ActivatedRoute);
   private readonly annonceService = inject(AnnonceService);
+    private readonly favorisService = inject(FavorisService)
+  
 
   annonce: AnnonceResponse | null = null;
   loading = false;
@@ -29,6 +42,12 @@ export class DetailAnnoceComponent implements OnInit, OnDestroy {
   images: string[] = [];
   currentIndex = 0;
   autoSlideInterval: any;
+
+  // Favoris State
+  isFavori = false;
+  favorisPending = false;
+  feedback: Feedback | null = null;
+  private feedbackTimer: any;
 
   readonly placeholderImg = 'assets/img/p-1.jpg';
 
@@ -67,6 +86,7 @@ export class DetailAnnoceComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.stopAutoSlide();
+    clearTimeout(this.feedbackTimer);
   }
 
   loadAnnonce(): void {
@@ -90,6 +110,7 @@ export class DetailAnnoceComponent implements OnInit, OnDestroy {
             // this.images = [this.annonce.photoPrincipaleUrl || this.placeholderImg];
           }
           this.startAutoSlide();
+          this.checkFavori(this.annonce.id);
         }
         this.loading = false;
       },
@@ -188,6 +209,73 @@ export class DetailAnnoceComponent implements OnInit, OnDestroy {
       }
     }
     return null;
+  }
+
+  // --------------------------------------------------------------- Favoris
+
+  /** Interroge le backend pour savoir si l'annonce est déjà en favoris. */
+  private checkFavori(annonceId: number): void {
+    this.favorisService.exists(annonceId).subscribe({
+      next: (res) => (this.isFavori = res.data === true),
+      // Silencieux : l'état du cœur ne doit pas polluer la page de détail
+      error: () => (this.isFavori = false),
+    });
+  }
+
+  favorisLabel(): string {
+    return this.isFavori ? 'Retirer des favoris' : 'Ajouter aux favoris';
+  }
+
+  /**
+   * Ajoute ou retire l'annonce des favoris.
+   * Mise à jour optimiste avec rollback si le backend refuse l'opération.
+   */
+  toggleFavoris(): void {
+    if (!this.annonce || this.favorisPending) {
+      return;
+    }
+
+    const id = this.annonce.id;
+    const titre = this.annonce.titre;
+    const wasFavori = this.isFavori;
+
+    this.favorisPending = true;
+    this.isFavori = !wasFavori;
+
+    const request$: Observable<ApiResponse<FavoriResponse>> = wasFavori
+      ? (this.favorisService.delete(id) as unknown as Observable<ApiResponse<FavoriResponse>>)
+      : this.favorisService.create({ annonceId: id }) as Observable<ApiResponse<FavoriResponse>>;
+
+    request$.subscribe({
+      next: () => {
+        this.favorisPending = false;
+        this.showFeedback(
+          'success',
+          wasFavori
+            ? `« ${titre} » a été retirée de vos favoris.`
+            : `« ${titre} » a été ajoutée à vos favoris.`
+        );
+      },
+      error: (err) => {
+        this.favorisPending = false;
+        this.isFavori = wasFavori; // rollback
+        this.showFeedback(
+          'danger',
+          err?.error?.message ?? "L'opération sur les favoris a échoué. Veuillez réessayer."
+        );
+      },
+    });
+  }
+
+  dismissFeedback(): void {
+    clearTimeout(this.feedbackTimer);
+    this.feedback = null;
+  }
+
+  private showFeedback(type: Feedback['type'], text: string): void {
+    clearTimeout(this.feedbackTimer);
+    this.feedback = { type, text };
+    this.feedbackTimer = setTimeout(() => (this.feedback = null), 4000);
   }
 }
 

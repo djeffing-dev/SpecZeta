@@ -114,6 +114,13 @@ export class AnnonceService {
     );
   }
 
+  updateStatus(annonceId: number): Observable<ApiResponse<AnnonceResponse>> {
+    return this.http.patch<ApiResponse<AnnonceResponse>>(
+      API_ENDPOINTS.ANNONCES.UPDATE_STATUT(annonceId),
+      { statut: StatutAnnonce.ACTIVE }
+    );
+  }
+
   /**
    * Construit des HttpParams en ignorant les valeurs `null`/`undefined`.
    */
@@ -126,4 +133,6 @@ export class AnnonceService {
     });
     return params;
   }
+
+
 }

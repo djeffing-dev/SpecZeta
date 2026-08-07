@@ -65,9 +65,21 @@ export class ListUserAnnonceComponent implements OnInit {
     }
   }
 
+  updateStatus(annoceId: number){
+    this.annonceService.updateStatus(annoceId).subscribe({
+      next: (result) => {
+        console.log("Annonce status updated: ", result);
+        this.loadMyAnnonces();
+      },
+      error: (err) => {
+        alert(err?.error?.message ?? 'La mise à jour du statut a échoué.');
+      }
+    })
+  }
+
   /** Nombre d'annonces actuellement publiées (statut ACTIVE). */
   get activeCount(): number {
-    return this.annonces.filter(a => a.status === StatutAnnonce.ACTIVE).length;
+    return this.annonces.filter(a => a.statut === StatutAnnonce.ACTIVE).length;
   }
 
   loadMyAnnonces(): void {
@@ -81,7 +93,7 @@ export class ListUserAnnonceComponent implements OnInit {
           ...ann,
           createdAt: this.parseBackendDate(ann.createdAt)
         }));
-        // console.log("Annonce : ", this.annonces);
+        console.log("Annonce : ", this.annonces);
         this.loading = false;
       },
       error: (err) => {

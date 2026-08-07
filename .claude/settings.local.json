@@ -2,7 +2,9 @@
   "permissions": {
     "allow": [
       "Bash(xargs cat)",
-      "Bash(grep -nA2 \"btn-primary\" public/assets/css/colors.css)"
+      "Bash(grep -nA2 \"btn-primary\" public/assets/css/colors.css)",
+      "Bash(node -p \"JSON.stringify\\(require\\('./package.json'\\).dependencies,null,1\\)\")",
+      "Bash(node -p \"JSON.stringify\\(require\\('./angular.json'\\).projects[Object.keys\\(require\\('./angular.json'\\).projects\\)[0]].architect.build.options,null,1\\)\")"
     ]
   }
 }

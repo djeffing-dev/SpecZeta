@@ -162,7 +162,7 @@ export interface AnnonceListResponse{
     prix: number;
     categorie: CategorieAnnonce;
     etat: EtatEsthetique;
-    status: StatutAnnonce;
+    statut: StatutAnnonce;
     certifiee: boolean;
     photoPrincipaleUrl: string;
     vendeurPseudo: string;
